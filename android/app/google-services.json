@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "179989518127",
+    "firebase_url": "https://desenvolverapp-de9e3.firebaseio.com",
+    "project_id": "desenvolverapp-de9e3",
+    "storage_bucket": "desenvolverapp-de9e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:179989518127:android:fe60b28df27bdc67",
+        "android_client_info": {
+          "package_name": "io.github.luizfernandoprog.desenvolverapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "179989518127-h8clho1gktfbre125imm6bto62gl37rj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6Q_44tEfr-MJln2LISUyzzThkPEjojnk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "179989518127-h8clho1gktfbre125imm6bto62gl37rj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
