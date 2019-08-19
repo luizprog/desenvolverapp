@@ -1,7 +1,7 @@
 name: desenvolverapp
 description: App para Analise de desempenho de atividades
 
-version: 1.0.0
+version: 1.0.0+1
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

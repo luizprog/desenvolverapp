@@ -55,7 +55,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
     }
   }
 
-  void _showDialogConcluir(String s, String t) {
+  void _showDialogConcluir(String s, String t, int x) {
     // flutter defined function
     t = "Finalizar a atividade com a seguinte conclusao:";
     showDialog(
@@ -89,6 +89,18 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                     .document(documentID)
                     .updateData({"conclusao": "sucesso", "pontuacao": 100});
 
+                /*var db_usuarios = Firestore.instance
+                    .collection('usuarios')
+                    .where(usuario, isEqualTo: loggedInUser);
+
+                    .//(pontuacao: pontuacaoAtual + x)
+                    .catchError((e) {
+                  print(e);
+                });
+*/
+                //Future<void> updateDocument(Map data , String id) {
+                //  return ref.document(id).updateData(data) ;
+                //}
                 //"pontuacaoAtual": "pontuacaoAtual",
 
                 Navigator.of(context).pop();
@@ -198,7 +210,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                     ),
                     onPressed: () {
                       _showDialogConcluir(
-                          "Concluido totalmente com ajuda!", "");
+                          "Concluido totalmente com ajuda!", "", 0);
                     },
                   ),
                   IconButton(
@@ -209,7 +221,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                     ),
                     onPressed: () {
                       _showDialogConcluir(
-                          "Concluido parcialmente com ajuda!", "");
+                          "Concluido parcialmente com ajuda!", "", 50);
                     },
                   ),
                   IconButton(
@@ -219,7 +231,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                       color: Colors.green,
                     ),
                     onPressed: () {
-                      _showDialogConcluir("Concluido com sucesso!", "");
+                      _showDialogConcluir("Concluido com sucesso!", "", 100);
                     },
                   ),
                 ],

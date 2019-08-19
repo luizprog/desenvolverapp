@@ -225,6 +225,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               _currentCity == null ? "comum" : _currentCity,
                           'usuario': novoCadastroEmail,
                           'nomeusuario': novoCadastroUsuario,
+                          'pontuacao': 0,
+                          'porcentagem': 0,
+                          'numeroAtividades': 0,
                         });
 
                         if (newUser != null) {
