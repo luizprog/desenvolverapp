@@ -13,6 +13,9 @@ class MenuInicialScreen extends StatefulWidget {
   static String ID = 'MenuInicial_screen';
   static String usuarioSelecionado;
   static String nomeUsuarioSelecionado;
+  static String vUserID;
+  static int pontuacaoAtual;
+  static int numeroAtividades;
   _MenuInicialScreenState createState() => _MenuInicialScreenState();
 }
 
@@ -65,9 +68,12 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
   }
 
   void goToAlunoAtividadesMain(
-      String emailUsuarioSelecionado, String nomeUsuarioSelecionado) {
+      String emailUsuarioSelecionado, String nomeUsuarioSelecionado, String documentID,int pontuacaoAtual, int numeroAtividades) {
     MenuInicialScreen.usuarioSelecionado = emailUsuarioSelecionado;
     MenuInicialScreen.nomeUsuarioSelecionado = nomeUsuarioSelecionado;
+    MenuInicialScreen.vUserID = documentID;
+    MenuInicialScreen.pontuacaoAtual = pontuacaoAtual;
+    MenuInicialScreen.numeroAtividades = numeroAtividades+1;
     Navigator.pushNamed(context, AlunoAtividadeScreen.ID);
   }
 
@@ -104,7 +110,7 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
                       child: MaterialButton(
                         onPressed: () {
                           goToAlunoAtividadesMain(
-                              document['usuario'], document['nomeusuario']);
+                              document['usuario'], document['nomeusuario'],document.documentID, document['pontuacaoAtual'], document['numeroAtividades']);
                         },
                         child: Text(
                           document['nomeusuario'],
@@ -156,7 +162,8 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
             child: Icon(Icons.group_add),
             backgroundColor: Colors.lightGreen,
             labelStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
-            label: 'Nova atividade compartilhada',
+            label: 'Relatório de desempenho',
+            labelBackgroundColor: Colors.grey,
             //labelStyle: TextTheme(fontSize: 18.0),
             onTap: () => print('THIRD CHILD'),
           ),

@@ -337,13 +337,13 @@ class _RegistroAtividadeIndividualScreenState
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   border: Border.all(
-                      style: BorderStyle.solid,
-                      color: Colors.blueAccent,
-                      width: 1.0)),
-              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
-              child: StreamBuilder<QuerySnapshot>(
-                stream: firestore.collection('tipoEntrega').snapshots(),
-                builder: (BuildContext context,
+                    style: BorderStyle.solid,
+                    color: Colors.blueAccent,
+                    width: 1.0)),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
+                  child: StreamBuilder<QuerySnapshot>(
+                  stream: firestore.collection('tipoEntrega').snapshots(),
+                  builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (!snapshot.hasData) return const Text('Carregando...');
                   return new DropdownButton<String>(

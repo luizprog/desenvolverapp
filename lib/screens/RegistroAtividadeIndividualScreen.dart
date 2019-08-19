@@ -22,6 +22,7 @@ class _RegistroAtividadeIndividualScreenState
   var _mySelection;
   var _mySelection2;
   var _mySelection3;
+  var _mySelection4;
 
   List<String> _comboTipo = new List<String>();
   bool showSpinner = false;
@@ -347,29 +348,42 @@ class _RegistroAtividadeIndividualScreenState
               height: 8.0,
             ),
             Container(
-              child: TextField(
-                style: TextStyle(color: Colors.black.withOpacity(1.0)),
-                decoration: InputDecoration(
-                  enabled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Colors.blueAccent, width: 1.0),
-                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Colors.blueAccent, width: 2.0),
-                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                  ),
-                  hintText: 'Hora de fazer as atividades',
-                  hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
-                  helperText: 'Informe a hora que deve ser feito a atividade',
-                ),
-                onChanged: (String value) {
-                  this.agendaHoraInformado = value;
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  border: Border.all(
+                      style: BorderStyle.solid,
+                      color: Colors.blueAccent,
+                      width: 1.0)),
+              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: firestore.collection('horaAtividade').orderBy('hora').snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) return const Text('Carregando...');
+                  return new DropdownButton<String>(
+                    iconEnabledColor: Colors.black,
+                    iconSize: 30.0,
+                    isExpanded: true,
+                    isDense: true,
+                    hint: new Text(
+                      "Horário para fazer atividade",
+                      style: TextStyle(color: Colors.blueAccent),
+                    ),
+                    value: _mySelection4,
+                    onChanged: (String newValue) {
+                      setState(() {
+                        this.agendaHoraInformado = newValue;
+                        _mySelection4 = newValue;
+                      });
+                    },
+                    items: snapshot.data.documents.map((map) {
+                      return new DropdownMenuItem<String>(
+                        value: map["hora"].toString(),
+                        child: new Text(map["hora"],
+                            style: TextStyle(color: Colors.blueAccent)),
+                      );
+                    }).toList(),
+                  );
                 },
               ),
             ),
@@ -454,7 +468,7 @@ class _RegistroAtividadeIndividualScreenState
                         'agendahora': agendaHoraInformado,
                         'dataDaInclusao': DateTime.now(),
                         'instrutor': regloggedInUser.email,
-                        'pontuacao': 0,
+                        'pontuacaoAtual': 0,
                       });
 
                       setState(() {

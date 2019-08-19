@@ -55,8 +55,9 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
     }
   }
 
-  void _showDialogConcluir(String s, String t, int x) {
+  void _showDialogConcluir(String s, String t, int x, int pontuacaoAtual, String ProcedimentoID, String UserID,int numeroAtividades) {
     // flutter defined function
+    String tipoConclusao;
     t = "Finalizar a atividade com a seguinte conclusao:";
     showDialog(
       context: context,
@@ -74,7 +75,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(
-              child: new Text("Close"),
+              child: new Text("Fechar"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -83,26 +84,27 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
               child: new Text("Concluir"),
               onPressed: () {
                 //pontuacaoAtual = 100;
+                if(x == 100) {
+                  tipoConclusao = 'sucesso';
+                }
+                if (x > 0 && x < 100 )
+                {
+                  tipoConclusao = 'ajuda parcial';
+                }
+                else
+                {
+                  tipoConclusao = 'ajuda total';
+                }
+                DateTime now = DateTime.now();
+                  Firestore.instance
+                      .collection("procedimento")
+                      .document(ProcedimentoID)
+                      .updateData({"conclusao": tipoConclusao, "pontuacao": x, 'dataEntrega': now});
 
-                Firestore.instance
-                    .collection("procedimento")
-                    .document(documentID)
-                    .updateData({"conclusao": "sucesso", "pontuacao": 100});
-
-                /*var db_usuarios = Firestore.instance
-                    .collection('usuarios')
-                    .where(usuario, isEqualTo: loggedInUser);
-
-                    .//(pontuacao: pontuacaoAtual + x)
-                    .catchError((e) {
-                  print(e);
-                });
-*/
-                //Future<void> updateDocument(Map data , String id) {
-                //  return ref.document(id).updateData(data) ;
-                //}
-                //"pontuacaoAtual": "pontuacaoAtual",
-
+                  Firestore.instance
+                      .collection('usuarios')
+                      .document(UserID)
+                      .updateData({'pontuacaoAtual': x + pontuacaoAtual,'numeroAtividades': numeroAtividades + 1});
                 Navigator.of(context).pop();
               },
             ),
@@ -110,6 +112,10 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
         );
       },
     );
+  }
+
+  void _callDialogConcluir(String s1, String s2, int x){
+    _showDialogConcluir(s1, s2, x,MenuInicialScreen.pontuacaoAtual  ,documentID ,MenuInicialScreen.vUserID,MenuInicialScreen.numeroAtividades);
   }
 
   void _openAddEntryDialog() {
@@ -209,8 +215,8 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                       color: Colors.deepOrangeAccent,
                     ),
                     onPressed: () {
-                      _showDialogConcluir(
-                          "Concluido totalmente com ajuda!", "", 0);
+                      _callDialogConcluir(
+                          "ajuda total", "", 0);
                     },
                   ),
                   IconButton(
@@ -220,8 +226,8 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                       color: Colors.blue,
                     ),
                     onPressed: () {
-                      _showDialogConcluir(
-                          "Concluido parcialmente com ajuda!", "", 50);
+                      _callDialogConcluir(
+                          "ajuda parcial", "", 50);
                     },
                   ),
                   IconButton(
@@ -231,7 +237,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                       color: Colors.green,
                     ),
                     onPressed: () {
-                      _showDialogConcluir("Concluido com sucesso!", "", 100);
+                      _callDialogConcluir("sucesso", "", 100);
                     },
                   ),
                 ],
