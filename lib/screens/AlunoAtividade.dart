@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'registration_screen.dart';
 import 'MenuInicial.dart';
+import 'MenuInicialUsuario.dart';
 
 class AlunoAtividadeScreen extends StatefulWidget {
   @override
@@ -84,14 +85,14 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
               child: new Text("Concluir"),
               onPressed: () {
                 //pontuacaoAtual = 100;
-                if(x == 100) {
+                if(x > 90) {
                   tipoConclusao = 'sucesso';
                 }
                 if (x > 0 && x < 100 )
                 {
                   tipoConclusao = 'ajuda parcial';
                 }
-                else
+                if(x < 1)
                 {
                   tipoConclusao = 'ajuda total';
                 }
@@ -101,11 +102,25 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                       .document(ProcedimentoID)
                       .updateData({"conclusao": tipoConclusao, "pontuacao": x, 'dataEntrega': now});
 
+                  print('>>>');
+                  print (x);
+                  print (pontuacaoAtual);
+                  print (numeroAtividades);
+
+                  print('<<<');
                   Firestore.instance
                       .collection('usuarios')
                       .document(UserID)
-                      .updateData({'pontuacaoAtual': x + pontuacaoAtual,'numeroAtividades': numeroAtividades + 1});
-                Navigator.of(context).pop();
+                      .updateData({'pontuacaoAtual': x + pontuacaoAtual,'numeroAtividades': numeroAtividades});
+
+
+
+                   if(MenuInicialScreen.loggedInUser.email == 'aba.desenvolver@gmail.com' || MenuInicialScreen.loggedInUser.email == 'luiz@ssuark.com.br'  ){
+                          Navigator.pushNamed(context, MenuInicialScreen.ID);
+                   }else{
+                          Navigator.pushNamed(context, MenuInicialUsuarioScreen.ID);
+                   }
+
               },
             ),
           ],
@@ -115,7 +130,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
   }
 
   void _callDialogConcluir(String s1, String s2, int x){
-    _showDialogConcluir(s1, s2, x,MenuInicialScreen.pontuacaoAtual  ,documentID ,MenuInicialScreen.vUserID,MenuInicialScreen.numeroAtividades);
+      _showDialogConcluir(s1, s2, x,MenuInicialScreen.pontuacaoAtual  ,documentID ,MenuInicialScreen.vUserID,MenuInicialScreen.numeroAtividades);
   }
 
   void _openAddEntryDialog() {

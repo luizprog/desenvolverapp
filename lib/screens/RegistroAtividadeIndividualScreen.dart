@@ -468,6 +468,7 @@ class _RegistroAtividadeIndividualScreenState
                         'agendahora': agendaHoraInformado,
                         'dataDaInclusao': DateTime.now(),
                         'instrutor': regloggedInUser.email,
+                        'pontuacao': 0,
                         'pontuacaoAtual': 0,
                       });
 

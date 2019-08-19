@@ -10,35 +10,40 @@ import 'package:flutter/cupertino.dart';
 class LoginScreen extends StatefulWidget {
   @override
   static String ID = 'login_screen';
-
+  static String PERMISSAO_USUARIO;
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _auth = FirebaseAuth.instance;
-  final _firestore = Firestore.instance;
+  var _auth = FirebaseAuth.instance;
+  var _firestore = Firestore.instance;
+
+
   bool showSpinner = false;
-  String usuario;
-  String usuarioEmail;
-  String senha;
-  String permissao;
+  String usuario = "";
+  String usuarioEmail = "";
+  String senha = "";
+  String permissao = "";
+  var loginUserName = null;
 
   void getUsuarioPermisssao() async {
     final permissao = await _firestore.collection('usuarios').getDocuments();
 
     for (var usuariosLogado in permissao.documents) {
       if (usuariosLogado.data['usuario'].toString() == usuarioEmail) {
+        LoginScreen.PERMISSAO_USUARIO = usuariosLogado.data['nivelDeAcesso'].toString();
         if (usuariosLogado.data['nivelDeAcesso'] == 'administrador') {
           Navigator.pushNamed(context, MenuInicialScreen.ID);
         } else {
-          Navigator.pushNamed(context, MenuInicialUsuarioScreen.ID);
+          Navigator.pushNamed(context, MenuInicialScreen.ID);
+          //Navigator.pushNamed(context, MenuInicialUsuarioScreen.ID);
         }
       }
     }
   }
 
   void getUsuarioEmail() async {
-    final loginUserName =
+    loginUserName =
         await _firestore.collection('usuarios').getDocuments();
     for (var usuariosLogado in loginUserName.documents) {
       if (usuariosLogado.data['nomeusuario'].toString() == usuario) {
@@ -48,6 +53,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final newUser = await _auth.signInWithEmailAndPassword(
         email: usuarioEmail, password: senha);
+    setState(() {
+
+    });
   }
 
   /* getSnapshot Stream message
@@ -168,6 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           showSpinner = false;
                         });
                       } catch (e) {
+                        _auth.signOut();
                         print("Erro");
                         print(e);
                       }

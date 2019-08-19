@@ -9,7 +9,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class MenuInicialUsuarioScreen extends StatefulWidget {
   @override
   static String ID = 'MenuInicialUsuario_screen';
-
+  static String usuarioSelecionado;
+  static String nomeUsuarioSelecionado;
+  static String vUserID;
+  static int pontuacaoAtual;
+  static int numeroAtividades;
   _MenuInicialUsuarioScreenState createState() =>
       _MenuInicialUsuarioScreenState();
 }
@@ -60,7 +64,7 @@ class _MenuInicialUsuarioScreenState extends State<MenuInicialUsuarioScreen> {
           child: StreamBuilder(
             stream: Firestore.instance
                 .collection('procedimento')
-                .where('usuario', isEqualTo: this.loggedInUser.email)
+                .where('usuario', isEqualTo: loggedInUser.email)
                 .snapshots(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -133,6 +137,7 @@ class MyCard extends StatelessWidget {
         child: new Container(
           padding: const EdgeInsets.all(10.0),
           child: new Row(
+
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             textDirection: TextDirection.ltr,
             children: <Widget>[this.title, this.icon],
