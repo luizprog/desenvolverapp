@@ -2,15 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'MenuInicial.dart';
-import 'MenuInicialUsuario.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
   static String ID = 'login_screen';
-  static String PERMISSAO_USUARIO;
+
+  //variaveis globais para uso em outras classes
+
+  static String       PERMISSAO_USUARIO;
+  static String       usuarioemailLogado     = "";
+  static String       nomeUsuarioLogado      = "";
+  static String       vUserIDLogado          = "";
+  static int          pontuacaoAtualLogado   = 0;
+  static int          numeroAtividadesLogado = 0;
+
   _LoginScreenState createState() => _LoginScreenState();
 }
 
@@ -18,26 +25,28 @@ class _LoginScreenState extends State<LoginScreen> {
   var _auth = FirebaseAuth.instance;
   var _firestore = Firestore.instance;
 
-
-  bool showSpinner = false;
-  String usuario = "";
+  bool showSpinner    = false;
+  String usuario      = "";
   String usuarioEmail = "";
-  String senha = "";
-  String permissao = "";
-  var loginUserName = null;
+  String senha        = "";
+  String permissao    = "";
+  var loginUserName   = null;
 
   void getUsuarioPermisssao() async {
     final permissao = await _firestore.collection('usuarios').getDocuments();
 
     for (var usuariosLogado in permissao.documents) {
       if (usuariosLogado.data['usuario'].toString() == usuarioEmail) {
+        LoginScreen.usuarioemailLogado          = usuariosLogado.data['usuario'];
+        LoginScreen.nomeUsuarioLogado           = usuariosLogado.data['nomeusuario'];
+        LoginScreen.vUserIDLogado               = usuariosLogado.documentID;
+        print("Document ID:aaaaaaaa");
+        print(LoginScreen.vUserIDLogado);
+        print("Document ID:zzzzzzzz");
+        LoginScreen.pontuacaoAtualLogado        = usuariosLogado.data['pontuacaoAtual'];
+        LoginScreen.numeroAtividadesLogado      = usuariosLogado.data['numeroAtividades'];
         LoginScreen.PERMISSAO_USUARIO = usuariosLogado.data['nivelDeAcesso'].toString();
-        if (usuariosLogado.data['nivelDeAcesso'] == 'administrador') {
-          Navigator.pushNamed(context, MenuInicialScreen.ID);
-        } else {
-          Navigator.pushNamed(context, MenuInicialScreen.ID);
-          //Navigator.pushNamed(context, MenuInicialUsuarioScreen.ID);
-        }
+        Navigator.pushNamed(context, MenuInicialScreen.ID);
       }
     }
   }
@@ -50,23 +59,12 @@ class _LoginScreenState extends State<LoginScreen> {
         usuarioEmail = usuariosLogado.data['usuario'].toString();
       }
     }
-
     final newUser = await _auth.signInWithEmailAndPassword(
         email: usuarioEmail, password: senha);
     setState(() {
-
+      print('setState');
     });
   }
-
-  /* getSnapshot Stream message
-  * void messageStream() async{
-  *   await for (var snapshots in _firestore.collection('usuarios').snapshots()){
-  *     for(var message in snapshot.documents){
-  *       print(message.data);
-  *     }
-  *   }
-  * }
-  * */
 
   @override
   Widget build(BuildContext context) {
@@ -177,6 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         });
                       } catch (e) {
                         _auth.signOut();
+                        AlertDialog(title: Text("Falha ao tentar efetuar o login, verifique os dados informados!"),);
                         print("Erro");
                         print(e);
                       }
