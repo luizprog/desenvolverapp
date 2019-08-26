@@ -40,9 +40,6 @@ class _LoginScreenState extends State<LoginScreen> {
         LoginScreen.usuarioemailLogado          = usuariosLogado.data['usuario'];
         LoginScreen.nomeUsuarioLogado           = usuariosLogado.data['nomeusuario'];
         LoginScreen.vUserIDLogado               = usuariosLogado.documentID;
-        print("Document ID:aaaaaaaa");
-        print(LoginScreen.vUserIDLogado);
-        print("Document ID:zzzzzzzz");
         LoginScreen.pontuacaoAtualLogado        = usuariosLogado.data['pontuacaoAtual'];
         LoginScreen.numeroAtividadesLogado      = usuariosLogado.data['numeroAtividades'];
         LoginScreen.PERMISSAO_USUARIO = usuariosLogado.data['nivelDeAcesso'].toString();

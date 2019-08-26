@@ -275,6 +275,52 @@ class _RegistroAtividadeIndividualScreenState
                 },
               ),
             ),
+
+            SizedBox(
+              height: 48.0,
+            ),
+            Center(
+              child: Text(
+                "Objetivo",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              height: 8.0,
+            ),
+            Container(
+              child: TextField(
+                style: TextStyle(color: Colors.black.withOpacity(1.0)),
+                decoration: InputDecoration(
+                  enabled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                    BorderSide(color: Colors.blueAccent, width: 1.0),
+                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                    BorderSide(color: Colors.blueAccent, width: 2.0),
+                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  ),
+                  hintText: 'descricao do procedimento',
+                  hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
+                  helperText: 'Informe como e oque deve ser feito na atividade',
+                ),
+                maxLines: 5,
+                onChanged: (String value) {
+                  this.descricaoInformado = value;
+                },
+              ),
+            ),
+
+
+
+
             SizedBox(
               height: 48.0,
             ),
@@ -308,7 +354,7 @@ class _RegistroAtividadeIndividualScreenState
                     isDense: true,
                     isExpanded: true,
                     hint: new Text(
-                      "Selecione os dias",
+                      "Dias",
                       style: TextStyle(color: Colors.black),
                     ),
                     iconSize: 30.0,
@@ -339,7 +385,7 @@ class _RegistroAtividadeIndividualScreenState
 
             Center(
               child: Text(
-                "Horario da atividade",
+                "Quantidade de vezes por dia:",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
               ),
@@ -366,7 +412,7 @@ class _RegistroAtividadeIndividualScreenState
                     isExpanded: true,
                     isDense: true,
                     hint: new Text(
-                      "Horário para fazer atividade",
+                      "X por dia",
                       style: TextStyle(color: Colors.blueAccent),
                     ),
                     value: _mySelection4,
@@ -489,6 +535,9 @@ class _RegistroAtividadeIndividualScreenState
                 ),
               ),
             ),
+
+
+
             SizedBox(
               height: 48.0,
             ),

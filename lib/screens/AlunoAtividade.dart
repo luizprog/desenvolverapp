@@ -1,4 +1,6 @@
 // ignore: unused_import
+import 'dart:ui' as prefix0;
+
 import 'package:desenvolverapp/screens/DialogAtividade.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +38,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
   String agendadiaSelecionada;
   String agendahoraSelecionada;
   String descricaoSelecionada;
+  String objetivoSelecionado;
   String documentID;
   int pontuacaoAtual = 0;
 
@@ -91,15 +94,15 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
               onPressed: () {
                 //pontuacaoAtual = 100;
                 if(x > 90) {
-                  tipoConclusao = 'sucesso';
+                  tipoConclusao = 'sem ajuda';
                 }
                 if (x > 0 && x < 100 )
                 {
-                  tipoConclusao = 'ajuda parcial';
+                  tipoConclusao = 'parcial';
                 }
                 if(x < 1)
                 {
-                  tipoConclusao = 'ajuda total';
+                  tipoConclusao = 'total';
                 }
                 DateTime now = DateTime.now();
                   Firestore.instance
@@ -179,7 +182,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                         color: Colors.white70,
                         child: new ListTile(
                           title: new Text(
-                            "Dia da atividade:",
+                            "Repetir nos dias:",
                             style: myTextStyle,
                           ),
                           subtitle: Text(
@@ -194,7 +197,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                         color: Colors.white70,
                         child: new ListTile(
                           title: new Text(
-                            "Horario da Atividade:",
+                            "Quantas vezes por dia:",
                             style: myTextStyle,
                           ),
                           subtitle: Text(
@@ -220,51 +223,71 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                           isThreeLine: true,
                         ),
                       ),
+                      new Card(
+                        color: Colors.white70,
+                        child: ListTile(
+                          title: new Text(
+                            "Objetivo atividade:",
+                            style: myTextStyle,
+                          ),
+                          subtitle: Text(
+                            objetivoSelecionado,
+                            style: TextStyle(color: Colors.black54),
+                          ),
+                          enabled: true,
+                          isThreeLine: true,
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
             bottomNavigationBar: BottomAppBar(
+              color: Colors.lightBlueAccent,
               child: new Row(
+
                 verticalDirection: VerticalDirection.up,
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  /* new FlatButton(
-                      onPressed: null, child: Icon(Icons.done_outline)),
-                 */
-                  IconButton(
-                    icon: Icon(
-                      Icons.thumb_down,
-                      size: 36.0,
-                      color: Colors.deepOrangeAccent,
+
+
+                  RaisedButton(
+                    textColor: Colors.white,
+                    color: Colors.deepOrange,
+                    child: Text("Total", style: TextStyle(color: Colors.white,),),
+                    onPressed: () {    _callDialogConcluir(
+                        "total", "", 0);},
+                    shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(30.0),
                     ),
+                  ),
+
+
+                  RaisedButton(
+                    textColor: Colors.white,
+                    color: Colors.yellowAccent,
+                child: Text("Parcial", style: TextStyle(color: Colors.blueAccent),),
+
                     onPressed: () {
                       _callDialogConcluir(
-                          "ajuda total", "", 0);
+                          "parcial", "", 50);
                     },
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.thumbs_up_down,
-                      size: 36.0,
-                      color: Colors.blue,
+                    shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(30.0),
                     ),
-                    onPressed: () {
-                      _callDialogConcluir(
-                          "ajuda parcial", "", 50);
-                    },
                   ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.thumb_up,
-                      size: 36.0,
-                      color: Colors.green,
-                    ),
+                  RaisedButton(
+                    textColor: Colors.white,
+                    color: Colors.green,
+                    child: Text("Sem Ajuda", style: TextStyle(color: Colors.white),),
                     onPressed: () {
-                      _callDialogConcluir("sucesso", "", 100);
+                      _callDialogConcluir("sem ajuda", "", 100);
                     },
+                    shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(30.0),
+                    ),
                   ),
                 ],
               ),
@@ -282,10 +305,10 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
       //Center(child: Icon(Icons.done, size: 24.0, color: Colors.green)),
    // ];
     final _kTabs = <Tab>[
-      Tab(icon: Icon(Icons.new_releases, color: Colors.yellowAccent, size: 24.0,),    text: 'Pendente'),
-      Tab(icon: Icon(Icons.thumb_up, color: Colors.greenAccent, size: 24.0,),    text: 'Sucesso' ),
-      Tab(icon: Icon(Icons.thumbs_up_down, color: Colors.blueAccent, size: 24.0,),    text: 'Parcial' ),
-      Tab(icon: Icon(Icons.thumb_down, color: Colors.orangeAccent , size: 24.0,),    text: 'Ajuda'   ),
+      Tab(icon: Icon(Icons.new_releases, color: Colors.yellowAccent, size: 24.0,),    text: 'Atividades'),
+      Tab(icon: Icon(Icons.lens, color: Colors.greenAccent, size: 24.0,),    text: 'Sem Ajuda' ),
+      Tab(icon: Icon(Icons.lens, color: Colors.blueAccent, size: 24.0,),    text: 'Parcial' ),
+      Tab(icon: Icon(Icons.lens, color: Colors.orangeAccent , size: 24.0,),    text: 'Total'   ),
 
     ];
     return DefaultTabController(
@@ -358,6 +381,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                           agendahoraSelecionada = document['agendahora'];
                           descricaoSelecionada = document['descricao'];
                           pontuacaoAtual = document['pontuacaoAtual'];
+                          objetivoSelecionado =  document['objetivo'];
                           documentID = document.documentID;
                           _openAddEntryDialog();
                         },
@@ -388,6 +412,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                           agendahoraSelecionada = document['agendahora'];
                           descricaoSelecionada = document['descricao'];
                           pontuacaoAtual = document['pontuacaoAtual'];
+                          objetivoSelecionado = document['objetivo'];
                           documentID = document.documentID;
                           _openAddEntryDialog();
                         },
@@ -453,6 +478,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                               agendahoraSelecionada = document['agendahora'];
                               descricaoSelecionada = document['descricao'];
                               pontuacaoAtual = document['pontuacaoAtual'];
+                              objetivoSelecionado = document['objetivo'];
                               documentID = document.documentID;
                               _openAddEntryDialog();
                             },
@@ -483,6 +509,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                               agendahoraSelecionada = document['agendahora'];
                               descricaoSelecionada = document['descricao'];
                               pontuacaoAtual = document['pontuacaoAtual'];
+                              objetivoSelecionado = document['objetivo'];
                               documentID = document.documentID;
                               _openAddEntryDialog();
                             },
@@ -548,6 +575,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                               agendahoraSelecionada = document['agendahora'];
                               descricaoSelecionada = document['descricao'];
                               pontuacaoAtual = document['pontuacaoAtual'];
+                              objetivoSelecionado = document['objetivo'];
                               documentID = document.documentID;
                               _openAddEntryDialog();
                             },
@@ -578,6 +606,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                               agendahoraSelecionada = document['agendahora'];
                               descricaoSelecionada = document['descricao'];
                               pontuacaoAtual = document['pontuacaoAtual'];
+                              objetivoSelecionado = document['objetivo'];
                               documentID = document.documentID;
                               _openAddEntryDialog();
                             },
@@ -643,6 +672,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                               agendahoraSelecionada = document['agendahora'];
                               descricaoSelecionada = document['descricao'];
                               pontuacaoAtual = document['pontuacaoAtual'];
+                              objetivoSelecionado = document['objetivo'];
                               documentID = document.documentID;
                               _openAddEntryDialog();
                             },

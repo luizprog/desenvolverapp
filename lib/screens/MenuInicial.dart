@@ -84,6 +84,9 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
   }
 
   String _getPorcentagem(int numAtividades, int pontosAtual) {
+    if(pontosAtual == 0 && numAtividades == 0){
+      return '0';
+    }
     var x = (numAtividades * 100) - pontosAtual;
     var y = (x / pontosAtual) * 100;
 
