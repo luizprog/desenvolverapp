@@ -29,7 +29,6 @@ import 'package:flutter/material.dart'
         TextStyle,
         Widget;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'chat_screen.dart';
 import 'MenuInicial.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,7 +38,6 @@ class RegistrationScreen extends StatefulWidget {
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }
-
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final _auth = FirebaseAuth.instance;
   final _firestore = Firestore.instance;
@@ -49,16 +47,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   String nomeusuario;
   String senha;
   String tipo;
-
   String novoCadastroEmail;
   String novoCadastroUsuario;
   String novoCadastroSenha;
-
   List _cities = ['administrador', 'comum'];
-
   List<DropdownMenuItem<String>> _dropDownMenuItems;
   String _currentCity;
-
   @override
   void initState() {
     _comboTipo.addAll(['administrador', 'comum']);
@@ -69,7 +63,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     _dropDownMenuItems = getDropDownMenuItems();
     tipo = _dropDownMenuItems[0].value;
   }
-
   List<DropdownMenuItem<String>> getDropDownMenuItems() {
     List<DropdownMenuItem<String>> items = new List();
     for (String city in _cities) {
@@ -77,14 +70,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
     return items;
   }
-
   void changedDropDownItem(String selectedCity) {
     setState(() {
       _currentCity = selectedCity;
       print(selectedCity);
     });
   }
-
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -194,15 +185,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               SizedBox(
                 height: 24.0,
               ),
-
-              /**/
-
               SizedBox(
                 height: 24.0,
               ),
-
-              /**/
-
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
                 child: Material(
@@ -226,6 +211,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           'usuario': novoCadastroEmail,
                           'nomeusuario': novoCadastroUsuario,
                           'pontuacao': 0,
+                          'pontuacaoAtual': 0,
                           'porcentagem': 0,
                           'numeroAtividades': 0,
                         });

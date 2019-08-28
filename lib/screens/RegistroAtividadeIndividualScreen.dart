@@ -38,6 +38,7 @@ class _RegistroAtividadeIndividualScreenState
   DatePickerMode diaCadastro;
   String tipoConclusaoInformado;
   String instrutorInformado;
+  String objetivoInformado;
 
   String dropdownValue = 'One';
 
@@ -307,13 +308,13 @@ class _RegistroAtividadeIndividualScreenState
                     BorderSide(color: Colors.blueAccent, width: 2.0),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
-                  hintText: 'descricao do procedimento',
+                  hintText: 'Objetivo da atividade',
                   hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
-                  helperText: 'Informe como e oque deve ser feito na atividade',
+                  helperText: 'Informe o Objetivo da atividade',
                 ),
                 maxLines: 5,
                 onChanged: (String value) {
-                  this.descricaoInformado = value;
+                  this.objetivoInformado = value;
                 },
               ),
             ),
@@ -412,8 +413,8 @@ class _RegistroAtividadeIndividualScreenState
                     isExpanded: true,
                     isDense: true,
                     hint: new Text(
-                      "X por dia",
-                      style: TextStyle(color: Colors.blueAccent),
+                      "vezes por dia",
+                      style: TextStyle(color: Colors.black),
                     ),
                     value: _mySelection4,
                     onChanged: (String newValue) {
@@ -509,13 +510,14 @@ class _RegistroAtividadeIndividualScreenState
                         'usuario': nomeInformado,
                         'procedimento': procedimentoInformado,
                         'descricao': descricaoInformado,
+                        'objetivo': objetivoInformado,
                         'conclusao': tipoConclusaoInformado,
                         'agendadia': agendaDiaInformado,
                         'agendahora': agendaHoraInformado,
                         'dataDaInclusao': DateTime.now(),
                         'instrutor': regloggedInUser.email,
                         'pontuacao': 0,
-                        'pontuacaoAtual': 0,
+                        'pontuacaoAtual': 0
                       });
 
                       setState(() {

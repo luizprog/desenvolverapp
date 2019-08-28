@@ -1,48 +1,39 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'registration_screen.dart';
+import 'RegistrationScreen.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'RegistroAtividadeIndividualScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'AlunoAtividade.dart';
-import 'login_screen.dart';
-import 'package:desenvolverapp/FuncoesUteis/Matematica.dart';
-import 'dart:math';
+import 'LoginScreen.dart';
 
 class MenuInicialScreen extends StatefulWidget {
   @override
   static String ID = 'MenuInicial_screen';
-
   //variaveis globais com os dados do usuario logado
   static String       currentUser            = "";
   static FirebaseUser loggedInUser           = null;
-
-
   //variaveis globais com os dados do usuario selecionado
   static String usuarioSelecionado     = "";
   static String nomeUsuarioSelecionado = "";
   static String vUserID                = "";
   static int    pontuacaoAtual         = 0;
   static int    numeroAtividades       = 0;
-
   _MenuInicialScreenState createState() => _MenuInicialScreenState();
 }
 
 class _MenuInicialScreenState extends State<MenuInicialScreen> {
   final _auth = FirebaseAuth.instance;
-  String senha       = "";
-  String usuario     = "";
-  Widget widgetBody;
-  String messageText = "";
-  String loggedInUserLocal;
-  bool   showSpinner = false;
+  String        senha       = "";
+  String        usuario     = "";
+  Widget        widgetBody;
+  String        messageText = "";
+  String        loggedInUserLocal;
+  bool          showSpinner = false;
   QuerySnapshot selectUser;
-  final double myIconSize = 20.0;
-  static final double myTextSize = 20.0;
+  final double  myIconSize = 20.0;
+  static final  double myTextSize = 20.0;
   final TextStyle myTextStyle =
       new TextStyle(color: Colors.black, fontSize: myTextSize);
 
@@ -52,18 +43,16 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
     getCurrentUser();
   }
 
-   getCurrentUser() async {
+  getCurrentUser() async {
     try {
       final user = await _auth.currentUser();
       if (user != null) {
         MenuInicialScreen.loggedInUser = user;
         loggedInUserLocal = user.email;
-        print(user.email);
-        print('qwertyu');
       }
     } catch (e) {
       //final sair = await _auth.signOut();
-      print(e);
+      print("Erro ao efetuar o login do usuario, verifique!");
     }
   }
 
@@ -78,8 +67,7 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
         showSpinner = false;
       });
     } catch (e) {
-      print("Erro");
-      print(e);
+      print("Erro ao tentar acessar tela de registro!");
     }
   }
 
@@ -89,18 +77,14 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
     }
     var x = (numAtividades * 100) - pontosAtual;
     var y = (x / pontosAtual) * 100;
-
     if (y < 0) {
       y = y * (-1);
     }
-
     var porcentagemFinal = 100 - y.round();
-
     return porcentagemFinal.toString();
   }
 
-  void goToAlunoAtividadesMain(
-      String emailUsuarioSelecionado, String nomeUsuarioSelecionado, String documentID,int pontuacaoAtual, int numeroAtividades) {
+  void goToAlunoAtividadesMain(String emailUsuarioSelecionado, String nomeUsuarioSelecionado, String documentID,int pontuacaoAtual, int numeroAtividades) {
     MenuInicialScreen.usuarioSelecionado = emailUsuarioSelecionado;
     MenuInicialScreen.nomeUsuarioSelecionado = nomeUsuarioSelecionado;
     MenuInicialScreen.vUserID = documentID;
@@ -109,19 +93,13 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
     Navigator.pushNamed(context, AlunoAtividadeScreen.ID);
   }
 
-
   _getUsuarioLogadoFromFirestore() async {
     return await Firestore.instance.collection('usuarios').where('usuario', isEqualTo: loggedInUserLocal).getDocuments();
   }
-/*  Future<Null> logoutWithGoogle() async {
-    await _auth.signOut();
-    await _googleSignIn.signOut();
-  }*/
 
   Widget build(BuildContext context) {
-
     if (LoginScreen.PERMISSAO_USUARIO.toString()=="administrador") // || MenuInicialScreen.lo == 'luiz@ssuark.com.br' )
-        {
+    {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.lightBlueAccent,
@@ -323,10 +301,7 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
 class MyCard extends StatelessWidget {
   final Widget icon;
   final Widget title;
-
-  // Constructor. {} here denote that they are optional values i.e you can use as: new MyCard()
   MyCard({this.title, this.icon});
-
   @override
   Widget build(BuildContext context) {
     return new Container(

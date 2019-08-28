@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'registration_screen.dart';
+import 'RegistrationScreen.dart';
 import 'MenuInicial.dart';
 import 'MenuInicialUsuario.dart';
 import 'dart:math';
@@ -41,6 +41,8 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
   String objetivoSelecionado;
   String documentID;
   int pontuacaoAtual = 0;
+
+  int qtde;
 
   static final double myTextSize = 20.0;
   final double myIconSize = 20.0;
@@ -105,10 +107,37 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                   tipoConclusao = 'total';
                 }
                 DateTime now = DateTime.now();
+
+
+                /**/
+                var Quantidade;
+                var document = Firestore.instance
+                .collection('procedimento')
+                .where('usuario',isEqualTo: MenuInicialScreen.usuarioSelecionado)
+                .where('conclusao', isEqualTo: "pendente")
+                .buildArguments();
+
+                Quantidade = document['entregasHoje'];
+
+                /**/
+
                   Firestore.instance
                       .collection("procedimento")
                       .document(ProcedimentoID)
-                      .updateData({"conclusao": tipoConclusao, "pontuacao": x, 'dataEntrega': now});
+                      .updateData({"entregasHoje": Quantidade+1, 'dataEntrega': now});
+
+
+                  //adicionando atividade diaria
+                  Firestore.instance.collection('procedimentosDiarios').add({
+                    'id': ProcedimentoID,
+                    'procedimento': atividadeSelecionada,
+                    'usuario':UserID,
+                    'dataEntrega':now,
+                    'conclusao':tipoConclusao,
+                    'pontuacao':x,
+                  });
+
+
 
                   print('>>>');
                   print (x);
@@ -133,6 +162,9 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
   }
 
   String _getPorcentagem(int numAtividades, int pontosAtual) {
+    if(pontosAtual == 0 && numAtividades == 0){
+      return '0';
+    }
     var x = (numAtividades * 100) - pontosAtual;
     var y = (x / pontosAtual) * 100;
 
@@ -144,6 +176,13 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
 
     return porcentagemFinal.toString();
   }
+
+  String _getAtividadesRestantes(int atividadesPorDia, int atividadesEntregues){
+    var qtdeFaltante = atividadesPorDia - atividadesEntregues;
+    String all = '';
+    return all;
+  }
+
   void _openAddEntryDialog() {
     Navigator.of(context).push(new MaterialPageRoute<Null>(
 
@@ -251,8 +290,6 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-
-
                   RaisedButton(
                     textColor: Colors.white,
                     color: Colors.deepOrange,
@@ -263,8 +300,6 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                       borderRadius: new BorderRadius.circular(30.0),
                     ),
                   ),
-
-
                   RaisedButton(
                     textColor: Colors.white,
                     color: Colors.yellowAccent,
@@ -345,13 +380,15 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                   child: CircularProgressIndicator(),
                 );
               }
+
+
               if (snapshot.hasData) {
                 return new Column(
                   mainAxisSize: MainAxisSize.max,
                   verticalDirection: VerticalDirection.down,
                   children: snapshot.data.documents.map((document) {
                     print(document['conclusao'].toString());
-                    if (document['conclusao'] == "sucesso") {
+                    if (document['conclusao'] == "sem ajuda") {
                       return new FlatButton(
                         child: Column(
                           children: <Widget>[
@@ -361,18 +398,14 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                                 style: myTextStyle,
                               ),
                               icon: new Icon(
-                                Icons.done,
+                                Icons.label_important,
                                 size: myIconSize,
-                                color: Colors.deepOrangeAccent,
+                                color: Colors.amberAccent,
                               ),
                             ),
                           ],
                         ),
                         onPressed: () {
-                          /*
-                          print(document['procedimento']);
-                          print(document['usuario']);
-                          */
                           nomeUsuarioSelecionado =
                               MenuInicialScreen.nomeUsuarioSelecionado;
                           usuarioSelecionado = document['usuario'];
@@ -387,6 +420,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                         },
                       ); //Column
                     } else {
+
                       return new FlatButton(
                         child: Column(
                           children: <Widget>[
@@ -395,11 +429,15 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                                 document['procedimento'],
                                 style: myTextStyle,
                               ),
+
                               icon: new Icon(
-                                Icons.done,
+                                Icons.label_important,
                                 size: myIconSize,
-                                color: Colors.deepOrangeAccent,
+                                color: Colors.amberAccent,
                               ),
+                              subtitle: Text('Faltam: '
+                                //+ _getAtividadesRestantes(document['agendahora'],document['entregasHoje'])
+                                , style: myTextStyle, ),
                             ),
                           ],
                         ),
@@ -431,10 +469,10 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
               padding: EdgeInsets.symmetric(horizontal: 24.0),
               child: StreamBuilder(
                 stream: Firestore.instance
-                    .collection('procedimento')
+                    .collection('procedimentosDiarios')
                     .where('usuario',
-                    isEqualTo: MenuInicialScreen.usuarioSelecionado)
-                    .where('conclusao', isEqualTo: 'sucesso')
+                    isEqualTo: MenuInicialScreen.vUserID)
+                    .where('conclusao', isEqualTo: 'sem ajuda')
                     .snapshots(),
                 builder:
                     (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -448,7 +486,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                       mainAxisSize: MainAxisSize.max,
                       verticalDirection: VerticalDirection.down,
                       children: snapshot.data.documents.map((document) {
-                        if (document['conclusao'] == "sucesso") {
+                        if (document['conclusao'] == "sem ajuda") {
                           return new FlatButton(
                             child: Column(
                               children: <Widget>[
@@ -458,18 +496,15 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                                     style: myTextStyle,
                                   ),
                                   icon: new Icon(
-                                    Icons.done,
+                                    Icons.done_all,
                                     size: myIconSize,
-                                    color: Colors.deepOrangeAccent,
+                                    color: Colors.greenAccent,
                                   ),
                                 ),
                               ],
                             ),
                             onPressed: () {
                               /*
-                          print(document['procedimento']);
-                          print(document['usuario']);
-                          */
                               nomeUsuarioSelecionado =
                                   MenuInicialScreen.nomeUsuarioSelecionado;
                               usuarioSelecionado = document['usuario'];
@@ -481,6 +516,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                               objetivoSelecionado = document['objetivo'];
                               documentID = document.documentID;
                               _openAddEntryDialog();
+                              */
                             },
                           ); //Column
                         } else {
@@ -493,9 +529,9 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                                     style: myTextStyle,
                                   ),
                                   icon: new Icon(
-                                    Icons.done,
+                                    Icons.done_all,
                                     size: myIconSize,
-                                    color: Colors.deepOrangeAccent,
+                                    color: Colors.greenAccent,
                                   ),
                                 ),
                               ],
@@ -528,10 +564,10 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
               padding: EdgeInsets.symmetric(horizontal: 24.0),
               child: StreamBuilder(
                 stream: Firestore.instance
-                    .collection('procedimento')
+                    .collection('procedimentosDiarios')
                     .where('usuario',
-                    isEqualTo: MenuInicialScreen.usuarioSelecionado)
-                    .where('conclusao', isEqualTo: 'ajuda parcial')
+                    isEqualTo: MenuInicialScreen.vUserID)
+                    .where('conclusao', isEqualTo: 'parcial')
                     .snapshots(),
                 builder:
                     (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -545,7 +581,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                       mainAxisSize: MainAxisSize.max,
                       verticalDirection: VerticalDirection.down,
                       children: snapshot.data.documents.map((document) {
-                        if (document['conclusao'] == "sucesso") {
+                        if (document['conclusao'] == "sem ajuda") {
                           return new FlatButton(
                             child: Column(
                               children: <Widget>[
@@ -557,16 +593,13 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                                   icon: new Icon(
                                     Icons.done,
                                     size: myIconSize,
-                                    color: Colors.deepOrangeAccent,
+                                    color: Colors.lightBlueAccent,
                                   ),
                                 ),
                               ],
                             ),
                             onPressed: () {
                               /*
-                          print(document['procedimento']);
-                          print(document['usuario']);
-                          */
                               nomeUsuarioSelecionado =
                                   MenuInicialScreen.nomeUsuarioSelecionado;
                               usuarioSelecionado = document['usuario'];
@@ -578,6 +611,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                               objetivoSelecionado = document['objetivo'];
                               documentID = document.documentID;
                               _openAddEntryDialog();
+                              */
                             },
                           ); //Column
                         } else {
@@ -592,12 +626,13 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                                   icon: new Icon(
                                     Icons.done,
                                     size: myIconSize,
-                                    color: Colors.deepOrangeAccent,
+                                    color: Colors.lightBlueAccent,
                                   ),
                                 ),
                               ],
                             ),
                             onPressed: () {
+                              /*
                               nomeUsuarioSelecionado =
                                   MenuInicialScreen.nomeUsuarioSelecionado;
                               usuarioSelecionado = document['usuario'];
@@ -609,6 +644,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                               objetivoSelecionado = document['objetivo'];
                               documentID = document.documentID;
                               _openAddEntryDialog();
+                              */
                             },
                           ); //Column
                         }
@@ -625,10 +661,10 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
               padding: EdgeInsets.symmetric(horizontal: 24.0),
               child: StreamBuilder(
                 stream: Firestore.instance
-                    .collection('procedimento')
+                    .collection('procedimentosDiarios')
                     .where('usuario',
-                    isEqualTo: MenuInicialScreen.usuarioSelecionado)
-                    .where('conclusao', isEqualTo: 'ajuda total')
+                    isEqualTo: MenuInicialScreen.vUserID)
+                    .where('conclusao', isEqualTo: 'total')
                     .snapshots(),
                 builder:
                     (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -642,7 +678,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                       mainAxisSize: MainAxisSize.max,
                       verticalDirection: VerticalDirection.down,
                       children: snapshot.data.documents.map((document) {
-                        if (document['conclusao'] == "sucesso") {
+                        if (document['conclusao'] == "sem ajuda") {
                           return new FlatButton(
                             child: Column(
                               children: <Widget>[
@@ -654,16 +690,13 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                                   icon: new Icon(
                                     Icons.done,
                                     size: myIconSize,
-                                    color: Colors.deepOrangeAccent,
+                                    color: Colors.deepOrange,
                                   ),
                                 ),
                               ],
                             ),
                             onPressed: () {
                               /*
-                          print(document['procedimento']);
-                          print(document['usuario']);
-                          */
                               nomeUsuarioSelecionado =
                                   MenuInicialScreen.nomeUsuarioSelecionado;
                               usuarioSelecionado = document['usuario'];
@@ -675,6 +708,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                               objetivoSelecionado = document['objetivo'];
                               documentID = document.documentID;
                               _openAddEntryDialog();
+                              */
                             },
                           ); //Column
                         } else {
@@ -689,7 +723,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                                   icon: new Icon(
                                     Icons.done,
                                     size: myIconSize,
-                                    color: Colors.deepOrangeAccent,
+                                    color: Colors.deepOrange,
                                   ),
                                 ),
                               ],
@@ -729,9 +763,10 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
 class MyCard extends StatelessWidget {
   final Widget icon;
   final Widget title;
+  final Widget subtitle;
 
   // Constructor. {} here denote that they are optional values i.e you can use as: new MyCard()
-  MyCard({this.title, this.icon});
+  MyCard({this.title, this.icon, this.subtitle});
 
   @override
   Widget build(BuildContext context) {
@@ -744,7 +779,7 @@ class MyCard extends StatelessWidget {
           child: new Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             textDirection: TextDirection.ltr,
-            children: <Widget>[this.title, this.icon],
+            children: <Widget>[this.title, this.icon, this.subtitle],
           ),
         ),
       ),

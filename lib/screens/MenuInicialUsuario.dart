@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'registration_screen.dart';
+import 'RegistrationScreen.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 

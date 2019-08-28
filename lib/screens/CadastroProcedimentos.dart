@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'chat_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'MenuInicial.dart';
 
 class CadastroProcedimentosScreen extends StatefulWidget {
   static String ID = 'CadastroProcedimentos_screen';
@@ -110,7 +110,7 @@ class _CadastroProcedimentosScreenState
                             await _auth.createUserWithEmailAndPassword(
                                 email: usuario, password: senha);
                         if (newUser != null) {
-                          Navigator.pushNamed(context, ChatScreen.ID);
+                          Navigator.pushNamed(context, MenuInicialScreen.ID);
                         }
                         setState(() {
                           showSpinner = false;

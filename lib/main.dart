@@ -1,9 +1,8 @@
 import 'package:desenvolverapp/screens/AlunoAtividade.dart';
 import 'package:flutter/material.dart';
-import 'package:desenvolverapp/screens/welcome_screen.dart';
-import 'package:desenvolverapp/screens/login_screen.dart';
-import 'package:desenvolverapp/screens/registration_screen.dart';
-import 'package:desenvolverapp/screens/chat_screen.dart';
+import 'package:desenvolverapp/screens/WelcomeScreen.dart';
+import 'package:desenvolverapp/screens/LoginScreen.dart';
+import 'package:desenvolverapp/screens/RegistrationScreen.dart';
 import 'package:desenvolverapp/screens/MenuInicial.dart';
 import 'package:desenvolverapp/screens/MenuInicialUsuario.dart';
 import 'package:desenvolverapp/screens/RegistroAtividadeIndividualScreen.dart';
@@ -20,7 +19,6 @@ class DesenvolverApp extends StatelessWidget {
         WelcomeScreen.ID: (context)            => WelcomeScreen(),
         LoginScreen.ID: (context)              => LoginScreen(),
         RegistrationScreen.ID: (context)       => RegistrationScreen(),
-        ChatScreen.ID: (context)               => ChatScreen(),
         MenuInicialScreen.ID: (context)        => MenuInicialScreen(),
         MenuInicialUsuarioScreen.ID: (context) => MenuInicialUsuarioScreen(),
         RegistroAtividadeIndividualScreen.ID: (context) => RegistroAtividadeIndividualScreen(),

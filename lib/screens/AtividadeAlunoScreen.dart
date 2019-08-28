@@ -267,7 +267,7 @@ class _RegistroAtividadeIndividualScreenState
                         BorderSide(color: Colors.blueAccent, width: 2.0),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
-                  hintText: 'descricao do procedimento',
+                  hintText: 'descrição do procedimento',
                   hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
                   helperText: 'Informe como e oque deve ser feito na atividade',
                 ),
@@ -283,7 +283,7 @@ class _RegistroAtividadeIndividualScreenState
 
             Center(
               child: Text(
-                "Horario da atividade",
+                "Quantidade p/ dia",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
               ),
@@ -309,9 +309,9 @@ class _RegistroAtividadeIndividualScreenState
                         BorderSide(color: Colors.blueAccent, width: 2.0),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
-                  hintText: 'Concluido em quantos minutos?',
+                  hintText: 'Concluido',
                   hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
-                  helperText: 'Informe a hora que deve ser feito a atividade',
+                  helperText: 'Informe a quantidade de vezes por dia',
                 ),
                 onChanged: (String value) {
                   this.agendaHoraInformado = value;
@@ -399,6 +399,7 @@ class _RegistroAtividadeIndividualScreenState
                         'agendahora': agendaHoraInformado,
                         'dataDaInclusao': DateTime.now(),
                         'instrutor': regloggedInUser.email,
+
                       });
 
                       setState(() {
