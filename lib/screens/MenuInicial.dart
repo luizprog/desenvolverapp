@@ -7,6 +7,7 @@ import 'RegistroAtividadeIndividualScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'AlunoAtividade.dart';
 import 'LoginScreen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MenuInicialScreen extends StatefulWidget {
   @override
@@ -96,6 +97,40 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
   _getUsuarioLogadoFromFirestore() async {
     return await Firestore.instance.collection('usuarios').where('usuario', isEqualTo: loggedInUserLocal).getDocuments();
   }
+
+  /**/
+
+  void _createEmail(String email,String assunto, String corpo) async{
+    String emailaddress = 'mailto:$email?subject=$assunto&body=$corpo';
+
+    if(await canLaunch(emailaddress)) {
+      await launch(emailaddress);
+    }  else {
+      throw 'Could not Email';
+    }
+  }
+
+  void _makeCall() async{
+    const phonenumber = "tel:9999999";
+
+    if(await canLaunch(phonenumber)) {
+      await launch(phonenumber);
+    } else {
+      throw 'Could not call';
+    }
+  }
+
+  void _sendSMS() async{
+    const phonenumber = "sms:9999999";
+
+    if(await canLaunch(phonenumber)) {
+      await launch(phonenumber);
+    } else {
+      throw 'Could not SMS';
+    }
+  }
+
+  /**/
 
   Widget build(BuildContext context) {
     if (LoginScreen.PERMISSAO_USUARIO.toString()=="administrador") // || MenuInicialScreen.lo == 'luiz@ssuark.com.br' )
@@ -205,31 +240,6 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
             padding: EdgeInsets.symmetric(horizontal: 24.0),
             child:
             Column(children: <Widget>[
-              new Container(
-
-                width: 680,
-                child: FlatButton(
-                  child: Column(
-                    children: <Widget>[
-                      new MyCard(
-                        title: new Text(
-                          "Próxima atividade",
-                          style: myTextStyle,
-                        ),
-                        icon: new Icon(
-                          Icons.schedule,
-                          size: myIconSize,
-                          color: Colors.blueAccent,
-                        ),
-                      ),
-                    ],
-                  ),
-                  onPressed: (){
-                    AlertDialog(title: Text("Próxima atividade"));
-                  }
-                ),
-              ),
-
 
               new Container(
                 width: 680,
@@ -242,9 +252,9 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
                           style: myTextStyle,
                         ),
                         icon: new Icon(
-                          Icons.arrow_forward,
+                          Icons.label,
                           size: myIconSize,
-                          color: Colors.greenAccent,
+                          color: Colors.lightBlueAccent,
                         ),
                       ),
                     ],
@@ -283,7 +293,12 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
                     ],
                   ),
                     onPressed: (){
-                      AlertDialog(title: Text("Duvida"));
+
+                      _createEmail('aba.desenvolver@gmail.com','Duvida App','Estou Com Dúvida.\n'
+                          + 'Usuario '
+                          + loggedInUserLocal
+                          + ' com duvidas no aplicativo.');
+                      //AlertDialog(title: Text("Duvida"));
                     }
                 ),
               ),

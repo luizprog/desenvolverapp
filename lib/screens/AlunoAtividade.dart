@@ -36,7 +36,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
   String nomeUsuarioSelecionado;
   String atividadeSelecionada;
   String agendadiaSelecionada;
-  String agendahoraSelecionada;
+  int agendahoraSelecionada;
   String descricaoSelecionada;
   String objetivoSelecionado;
   String documentID;
@@ -117,14 +117,19 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                 .where('conclusao', isEqualTo: "pendente")
                 .buildArguments();
 
-                Quantidade = document['entregasHoje'];
 
+                if(document['entregasHoje'] != null){
+                  Quantidade = document['entregasHoje'];
+                }
+                else{
+                  Quantidade = 0;
+                }
                 /**/
-
+                Quantidade = Quantidade + 1;
                   Firestore.instance
                       .collection("procedimento")
                       .document(ProcedimentoID)
-                      .updateData({"entregasHoje": Quantidade+1, 'dataEntrega': now});
+                      .updateData({"entregasHoje": Quantidade, 'dataEntrega': now});
 
 
                   //adicionando atividade diaria
@@ -179,7 +184,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
 
   String _getAtividadesRestantes(int atividadesPorDia, int atividadesEntregues){
     var qtdeFaltante = atividadesPorDia - atividadesEntregues;
-    String all = '';
+    String all = qtdeFaltante.toString();
     return all;
   }
 
@@ -226,21 +231,6 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                           ),
                           subtitle: Text(
                             agendadiaSelecionada,
-                            style: TextStyle(color: Colors.black54),
-                          ),
-                          enabled: true,
-                          isThreeLine: true,
-                        ),
-                      ),
-                      new Card(
-                        color: Colors.white70,
-                        child: new ListTile(
-                          title: new Text(
-                            "Quantas vezes por dia:",
-                            style: myTextStyle,
-                          ),
-                          subtitle: Text(
-                            agendahoraSelecionada,
                             style: TextStyle(color: Colors.black54),
                           ),
                           enabled: true,
@@ -435,8 +425,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                                 size: myIconSize,
                                 color: Colors.amberAccent,
                               ),
-                              subtitle: Text('Faltam: '
-                                //+ _getAtividadesRestantes(document['agendahora'],document['entregasHoje'])
+                              subtitle: Text(_getAtividadesRestantes(document['agendahora'],document['entregasHoje'])
                                 , style: myTextStyle, ),
                             ),
                           ],
