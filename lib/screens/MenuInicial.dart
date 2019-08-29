@@ -293,7 +293,6 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
                     ],
                   ),
                     onPressed: (){
-
                       _createEmail('aba.desenvolver@gmail.com','Duvida App','Estou Com Dúvida.\n'
                           + 'Usuario '
                           + loggedInUserLocal
@@ -303,11 +302,9 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
                 ),
               ),
             ],
-
             ),
           ),
         ),
-
       );
     }
   }

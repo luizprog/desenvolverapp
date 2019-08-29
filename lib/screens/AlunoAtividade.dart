@@ -42,6 +42,11 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
   String documentID;
   int pontuacaoAtual = 0;
 
+  /**/
+  var diasEntrega;
+  var entreguesNoDiaDeHoje;
+
+  /**/
   int qtde;
 
   static final double myTextSize = 20.0;
@@ -117,9 +122,11 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                 .where('conclusao', isEqualTo: "pendente")
                 .buildArguments();
 
-
+                var qwerty;
+                qwerty = document['entregasHoje'];
+                print(qwerty);
                 if(document['entregasHoje'] != null){
-                  Quantidade = document['entregasHoje'];
+                  Quantidade = entreguesNoDiaDeHoje;
                 }
                 else{
                   Quantidade = 0;
@@ -133,7 +140,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
 
 
                   //adicionando atividade diaria
-                  Firestore.instance.collection('procedimentosDiarios').add({
+                  Firestore.instance.collection('entregaProcedimento').add({
                     'id': ProcedimentoID,
                     'procedimento': atividadeSelecionada,
                     'usuario':UserID,
@@ -184,7 +191,10 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
 
   String _getAtividadesRestantes(int atividadesPorDia, int atividadesEntregues){
     var qtdeFaltante = atividadesPorDia - atividadesEntregues;
-    String all = qtdeFaltante.toString();
+    String all;
+    diasEntrega          =  atividadesPorDia;
+    entreguesNoDiaDeHoje = atividadesEntregues;
+    all = qtdeFaltante.toString();
     return all;
   }
 
@@ -421,27 +431,33 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                               ),
 
                               icon: new Icon(
-                                Icons.label_important,
+                                Icons.chevron_right,
                                 size: myIconSize,
-                                color: Colors.amberAccent,
+                                color: Colors.transparent,
                               ),
-                              subtitle: Text(_getAtividadesRestantes(document['agendahora'],document['entregasHoje'])
+
+                              subtitle: Text(_getAtividadesRestantes(document['agendahora']
+                                  ,document['entregasHoje'])
                                 , style: myTextStyle, ),
                             ),
                           ],
                         ),
                         onPressed: () {
-                          nomeUsuarioSelecionado =
-                              MenuInicialScreen.nomeUsuarioSelecionado;
-                          usuarioSelecionado = document['usuario'];
-                          atividadeSelecionada = document['procedimento'];
-                          agendadiaSelecionada = document['agendadia'];
-                          agendahoraSelecionada = document['agendahora'];
-                          descricaoSelecionada = document['descricao'];
-                          pontuacaoAtual = document['pontuacaoAtual'];
-                          objetivoSelecionado = document['objetivo'];
-                          documentID = document.documentID;
-                          _openAddEntryDialog();
+                          setState(() {
+                            nomeUsuarioSelecionado =
+                                MenuInicialScreen.nomeUsuarioSelecionado;
+                            usuarioSelecionado = document['usuario'];
+                            atividadeSelecionada = document['procedimento'];
+                            agendadiaSelecionada = document['agendadia'];
+                            agendahoraSelecionada = document['agendahora'];
+                            descricaoSelecionada = document['descricao'];
+                            pontuacaoAtual = document['pontuacaoAtual'];
+                            objetivoSelecionado = document['objetivo'];
+                            documentID = document.documentID;
+                            setState(() {
+                              _openAddEntryDialog();
+                            });
+                          });
                         },
                       ); //Column
                     }
