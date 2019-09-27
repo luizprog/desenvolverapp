@@ -157,9 +157,8 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) return new Text('Loading...');
 
-                return new Column(
-                  mainAxisSize: MainAxisSize.max,
-                  verticalDirection: VerticalDirection.down,
+                return new ListView(
+
                   children: snapshot.data.documents.map((document) {
                     return new Container(
                       padding: const EdgeInsets.all(5.0),
@@ -173,7 +172,7 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
                                 document['numeroAtividades']);
                           },
                           child: Text(
-                            document['nomeusuario'] + ' - ' +  _getPorcentagem(document['numeroAtividades'],document['pontuacaoAtual']) + '%',
+                            document['nomeusuario'] + ' - ' +   _getPorcentagem(document['numeroAtividades'],document['pontuacaoAtual']) + '%',
                             style: myTextStyle,
                           ),
                         ),

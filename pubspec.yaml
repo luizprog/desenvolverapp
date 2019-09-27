@@ -17,6 +17,8 @@ dependencies:
   flutter_speed_dial: ^1.0.9
   cupertino_icons: ^0.1.2
   url_launcher:  '>=0.4.2 < 5.2.1'
+  intl: ^0.16.0
+  date_format: ^1.0.6
 
 dev_dependencies:
   flutter_test:

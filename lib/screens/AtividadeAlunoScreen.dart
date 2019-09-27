@@ -22,26 +22,21 @@ class _RegistroAtividadeIndividualScreenState
   var _mySelection;
   var _mySelection2;
   var _mySelection3;
-
   List<String> _comboTipo = new List<String>();
   bool showSpinner = false;
   String usuario;
   String senha;
   String tipo;
-
   String nomeInformado;
   String procedimentoInformado;
   String descricaoInformado;
   String agendaDiaInformado;
   String agendaHoraInformado;
-  DatePickerMode diaCadastro;
   String tipoConclusaoInformado;
   String instrutorInformado;
-
   String dropdownValue = 'One';
-
+  DatePickerMode diaCadastro;
   List _cities = ['administrador', 'comum'];
-
   List<DropdownMenuItem<String>> _dropDownMenuItems;
   String _currentCity;
 
@@ -60,7 +55,6 @@ class _RegistroAtividadeIndividualScreenState
       if (user != null) {
         regloggedInUser = user;
         print(user.email);
-        print('qwertyu');
       }
     } catch (e) {
       print(e);

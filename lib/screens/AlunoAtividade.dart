@@ -1,4 +1,5 @@
 // ignore: unused_import
+import 'dart:async';
 import 'dart:ui' as prefix0;
 
 import 'package:desenvolverapp/screens/DialogAtividade.dart';
@@ -14,43 +15,37 @@ import 'dart:math';
 import 'MenuInicial.dart';
 import 'MenuInicial.dart';
 import 'package:desenvolverapp/FuncoesUteis/Matematica.dart';
-
+import 'package:intl/intl.dart';
+import 'package:date_format/date_format.dart';
 
 class AlunoAtividadeScreen extends StatefulWidget {
   @override
   static String ID = 'AlunoAtividade_screen';
-
   _AlunoAtividadeScreenState createState() => _AlunoAtividadeScreenState();
-}
+ }
 
 class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
   final _auth = FirebaseAuth.instance;
   bool showSpinner = false;
+  bool TemDados;
   String senha;
   String usuario;
-  FirebaseUser loggedInUser;
   String messageText;
-  bool TemDados;
-
   String usuarioSelecionado;
   String nomeUsuarioSelecionado;
   String atividadeSelecionada;
   String agendadiaSelecionada;
-  int agendahoraSelecionada;
   String descricaoSelecionada;
   String objetivoSelecionado;
   String documentID;
-  int pontuacaoAtual = 0;
-
-  /**/
+  int    agendahoraSelecionada;
+  int    pontuacaoAtual = 0;
+  int    qtde;
+  FirebaseUser loggedInUser;
   var diasEntrega;
   var entreguesNoDiaDeHoje;
-
-  /**/
-  int qtde;
-
-  static final double myTextSize = 20.0;
-  final double myIconSize = 20.0;
+  static final double myTextSize = 15.0;
+  final double myIconSize = 12.0;
   final TextStyle myTextStyle =
       new TextStyle(color: Colors.black, fontSize: myTextSize);
 
@@ -113,8 +108,6 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                 }
                 DateTime now = DateTime.now();
 
-
-                /**/
                 var Quantidade;
                 var document = Firestore.instance
                 .collection('procedimento')
@@ -124,20 +117,18 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
 
                 var qwerty;
                 qwerty = document['entregasHoje'];
-                print(qwerty);
                 if(document['entregasHoje'] != null){
                   Quantidade = entreguesNoDiaDeHoje;
                 }
                 else{
                   Quantidade = 0;
                 }
-                /**/
-                Quantidade = Quantidade + 1;
+
+                  Quantidade = Quantidade + 1;
                   Firestore.instance
                       .collection("procedimento")
                       .document(ProcedimentoID)
                       .updateData({"entregasHoje": Quantidade, 'dataEntrega': now});
-
 
                   //adicionando atividade diaria
                   Firestore.instance.collection('entregaProcedimento').add({
@@ -148,15 +139,6 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                     'conclusao':tipoConclusao,
                     'pontuacao':x,
                   });
-
-
-
-                  print('>>>');
-                  print (x);
-                  print (pontuacaoAtual);
-                  print (numeroAtividades);
-
-                  print('<<<');
                   Firestore.instance
                       .collection('usuarios')
                       .document(UserID)
@@ -200,16 +182,13 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
 
   void _openAddEntryDialog() {
     Navigator.of(context).push(new MaterialPageRoute<Null>(
-
         builder: (BuildContext context) {
           return Scaffold(
-
             appBar: AppBar(
               backgroundColor: Colors.lightBlueAccent,
               centerTitle: true,
               title: Text('Atividades ' + ' - ' + MenuInicialScreen.pontuacaoAtual.toString()),
             ),
-
             backgroundColor: Colors.white,
             body: ModalProgressHUD(
               inAsyncCall: showSpinner,
@@ -284,8 +263,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
             ),
             bottomNavigationBar: BottomAppBar(
               color: Colors.lightBlueAccent,
-              child: new Row(
-
+              child: new Container(child: Row(
                 verticalDirection: VerticalDirection.up,
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -304,7 +282,6 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                     textColor: Colors.white,
                     color: Colors.yellowAccent,
                 child: Text("Parcial", style: TextStyle(color: Colors.blueAccent),),
-
                     onPressed: () {
                       _callDialogConcluir(
                           "parcial", "", 50);
@@ -325,6 +302,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                     ),
                   ),
                 ],
+              ),
               ),
             ),
           );
@@ -381,27 +359,23 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                 );
               }
 
-
               if (snapshot.hasData) {
                 return new Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
                   verticalDirection: VerticalDirection.down,
                   children: snapshot.data.documents.map((document) {
-                    print(document['conclusao'].toString());
                     if (document['conclusao'] == "sem ajuda") {
                       return new FlatButton(
-                        child: Column(
+                        child:  Column(
                           children: <Widget>[
                             new MyCard(
+                              subtitle: Text(""),
                               title: new Text(
                                 document['procedimento'],
                                 style: myTextStyle,
                               ),
-                              icon: new Icon(
-                                Icons.label_important,
-                                size: myIconSize,
-                                color: Colors.amberAccent,
-                              ),
+                              //icon: new Icon(Icons.label_important,size: myIconSize,color: Colors.amberAccent,),
                             ),
                           ],
                         ),
@@ -430,14 +404,10 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                                 style: myTextStyle,
                               ),
 
-                              icon: new Icon(
-                                Icons.chevron_right,
-                                size: myIconSize,
-                                color: Colors.transparent,
-                              ),
+                              //icon: new Icon(Icons.chevron_right,size: myIconSize,color: Colors.transparent,),
 
-                              subtitle: Text(_getAtividadesRestantes(document['agendahora']
-                                  ,document['entregasHoje'])
+                              subtitle: Text(document['agendahora'].toString()/*_getAtividadesRestantes(document['agendahora']
+                                  ,document['entregasHoje'])*/
                                 , style: myTextStyle, ),
                             ),
                           ],
@@ -477,7 +447,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                     .collection('procedimentosDiarios')
                     .where('usuario',
                     isEqualTo: MenuInicialScreen.vUserID)
-                    .where('conclusao', isEqualTo: 'sem ajuda')
+                    .where('conclusao', isEqualTo: 'sem ajuda').orderBy('id')
                     .snapshots(),
                 builder:
                     (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -487,41 +457,96 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                     );
                   }
                   if (snapshot.hasData) {
-                    return new Column(
-                      mainAxisSize: MainAxisSize.max,
-                      verticalDirection: VerticalDirection.down,
+                    return new ListView(
+                       children: snapshot.data.documents.map((document) {
+                         if (document['conclusao'] == "sem ajuda") {
+                           return new FlatButton(
+                             child: Column(
+                               children: <Widget>[
+                                 new MyCard(
+                                   subtitle: Text(""),
+                                   title: new Text(
+                                       // ignore: missing_return
+                                       document['procedimento'].toString() + ' • ' + formatDate(DateTime.fromMillisecondsSinceEpoch(document['dataEntrega'].seconds * 1000), [dd,'/',mm,'/',yyyy,' ',HH,':',nn ]) ,
+                                     //picles
+                                     // + ' - '+ document['procedimento'],
+
+                                     style: myTextStyle,
+                                   ),
+                                   //icon: new Icon(Icons.done_all,size: myIconSize,color: Colors.greenAccent,),
+                                 ),
+                               ],
+                             ),
+                             onPressed: () {
+
+                               print(document['dataEntrega'].toString());
+                               print("Sem ajuda clicado!");
+                             },
+                           ); //Column
+                         } else {
+                           return new FlatButton(
+                             child: Column(
+                               children: <Widget>[
+                                 new MyCard(
+                                   subtitle: Text(""),
+                                   title: new Text(
+                                     document['procedimento'].toString() + ' • ' + formatDate(DateTime.fromMillisecondsSinceEpoch(document['dataEntrega'].seconds * 1000), [dd,'/',mm,'/',yyyy,' ',HH,':',nn ]) ,
+                                     style: myTextStyle,
+                                   ),
+                                   //icon: new Icon(Icons.done_all,size: myIconSize,color: Colors.greenAccent,),
+                                 ),
+                               ],
+                             ),
+                             onPressed: () {
+                               print("Sem ajuda clicado");
+                             },
+                           ); //Column
+                         }
+                       }).toList(),
+                     ); //ListView
+                  }
+                },
+              ),
+            ),
+          ),
+          ModalProgressHUD(
+            inAsyncCall: showSpinner,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.0),
+              child: StreamBuilder(
+                stream: Firestore.instance
+                    .collection('procedimentosDiarios')
+                    .where('usuario',
+                    isEqualTo: MenuInicialScreen.vUserID)
+                    .where('conclusao', isEqualTo: 'parcial').orderBy('id')
+                    .snapshots(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) {
+                    return new Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.hasData) {
+                    return new ListView(
+
                       children: snapshot.data.documents.map((document) {
                         if (document['conclusao'] == "sem ajuda") {
                           return new FlatButton(
                             child: Column(
                               children: <Widget>[
                                 new MyCard(
+                                  subtitle: Text(""),
                                   title: new Text(
-                                    document['procedimento'],
+                                    document['procedimento'].toString() + ' • ' + formatDate(DateTime.fromMillisecondsSinceEpoch(document['dataEntrega'].seconds * 1000), [dd,'/',mm,'/',yyyy,' ',HH,':',nn ]) ,
                                     style: myTextStyle,
                                   ),
-                                  icon: new Icon(
-                                    Icons.done_all,
-                                    size: myIconSize,
-                                    color: Colors.greenAccent,
-                                  ),
+                                  //icon: new Icon(Icons.done,size: myIconSize,color: Colors.lightBlueAccent,),
                                 ),
                               ],
                             ),
                             onPressed: () {
-                              /*
-                              nomeUsuarioSelecionado =
-                                  MenuInicialScreen.nomeUsuarioSelecionado;
-                              usuarioSelecionado = document['usuario'];
-                              atividadeSelecionada = document['procedimento'];
-                              agendadiaSelecionada = document['agendadia'];
-                              agendahoraSelecionada = document['agendahora'];
-                              descricaoSelecionada = document['descricao'];
-                              pontuacaoAtual = document['pontuacaoAtual'];
-                              objetivoSelecionado = document['objetivo'];
-                              documentID = document.documentID;
-                              _openAddEntryDialog();
-                              */
+                              print("qwert Clicado done");
                             },
                           ); //Column
                         } else {
@@ -529,30 +554,17 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                             child: Column(
                               children: <Widget>[
                                 new MyCard(
+                                  subtitle: Text(""),
                                   title: new Text(
-                                    document['procedimento'],
+                                    document['procedimento'].toString() + ' • ' + formatDate(DateTime.fromMillisecondsSinceEpoch(document['dataEntrega'].seconds * 1000), [dd,'/',mm,'/',yyyy,' ',HH,':',nn ]) ,
                                     style: myTextStyle,
                                   ),
-                                  icon: new Icon(
-                                    Icons.done_all,
-                                    size: myIconSize,
-                                    color: Colors.greenAccent,
-                                  ),
+                                  //icon: new Icon(Icons.done,size: myIconSize,color: Colors.lightBlueAccent,),
                                 ),
                               ],
                             ),
                             onPressed: () {
-                              nomeUsuarioSelecionado =
-                                  MenuInicialScreen.nomeUsuarioSelecionado;
-                              usuarioSelecionado = document['usuario'];
-                              atividadeSelecionada = document['procedimento'];
-                              agendadiaSelecionada = document['agendadia'];
-                              agendahoraSelecionada = document['agendahora'];
-                              descricaoSelecionada = document['descricao'];
-                              pontuacaoAtual = document['pontuacaoAtual'];
-                              objetivoSelecionado = document['objetivo'];
-                              documentID = document.documentID;
-                              _openAddEntryDialog();
+                              print("Parcial Clicado");
                             },
                           ); //Column
                         }
@@ -572,8 +584,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                     .collection('procedimentosDiarios')
                     .where('usuario',
                     isEqualTo: MenuInicialScreen.vUserID)
-                    .where('conclusao', isEqualTo: 'parcial')
-                    .snapshots(),
+                    .where('conclusao', isEqualTo: 'total').snapshots(),
                 builder:
                     (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (!snapshot.hasData) {
@@ -582,41 +593,24 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                     );
                   }
                   if (snapshot.hasData) {
-                    return new Column(
-                      mainAxisSize: MainAxisSize.max,
-                      verticalDirection: VerticalDirection.down,
+                    return new ListView(
                       children: snapshot.data.documents.map((document) {
                         if (document['conclusao'] == "sem ajuda") {
                           return new FlatButton(
                             child: Column(
                               children: <Widget>[
                                 new MyCard(
+                                  subtitle: Text(""),
                                   title: new Text(
-                                    document['procedimento'],
+                                    document['procedimento'].toString() + ' • ' + formatDate(DateTime.fromMillisecondsSinceEpoch(document['dataEntrega'].seconds * 1000), [dd,'/',mm,'/',yyyy,' ',HH,':',nn ]) ,
                                     style: myTextStyle,
                                   ),
-                                  icon: new Icon(
-                                    Icons.done,
-                                    size: myIconSize,
-                                    color: Colors.lightBlueAccent,
-                                  ),
+                                  //icon: new Icon(Icons.done,size: myIconSize,color: Colors.deepOrange,),
                                 ),
                               ],
                             ),
                             onPressed: () {
-                              /*
-                              nomeUsuarioSelecionado =
-                                  MenuInicialScreen.nomeUsuarioSelecionado;
-                              usuarioSelecionado = document['usuario'];
-                              atividadeSelecionada = document['procedimento'];
-                              agendadiaSelecionada = document['agendadia'];
-                              agendahoraSelecionada = document['agendahora'];
-                              descricaoSelecionada = document['descricao'];
-                              pontuacaoAtual = document['pontuacaoAtual'];
-                              objetivoSelecionado = document['objetivo'];
-                              documentID = document.documentID;
-                              _openAddEntryDialog();
-                              */
+                              print('qwert  orange');
                             },
                           ); //Column
                         } else {
@@ -624,126 +618,18 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                             child: Column(
                               children: <Widget>[
                                 new MyCard(
+                                  subtitle: Text(""),
                                   title: new Text(
-                                    document['procedimento'],
+                                    document['procedimento'].toString(),
                                     style: myTextStyle,
                                   ),
-                                  icon: new Icon(
-                                    Icons.done,
-                                    size: myIconSize,
-                                    color: Colors.lightBlueAccent,
-                                  ),
+                                  //icon: new Icon(Icons.done,size: myIconSize,color: Colors.deepOrange,),
                                 ),
                               ],
                             ),
                             onPressed: () {
-                              /*
-                              nomeUsuarioSelecionado =
-                                  MenuInicialScreen.nomeUsuarioSelecionado;
-                              usuarioSelecionado = document['usuario'];
-                              atividadeSelecionada = document['procedimento'];
-                              agendadiaSelecionada = document['agendadia'];
-                              agendahoraSelecionada = document['agendahora'];
-                              descricaoSelecionada = document['descricao'];
-                              pontuacaoAtual = document['pontuacaoAtual'];
-                              objetivoSelecionado = document['objetivo'];
-                              documentID = document.documentID;
-                              _openAddEntryDialog();
-                              */
-                            },
-                          ); //Column
-                        }
-                      }).toList(),
-                    ); //ListView
-                  }
-                },
-              ),
-            ),
-          ),
-          ModalProgressHUD(
-            inAsyncCall: showSpinner,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.0),
-              child: StreamBuilder(
-                stream: Firestore.instance
-                    .collection('procedimentosDiarios')
-                    .where('usuario',
-                    isEqualTo: MenuInicialScreen.vUserID)
-                    .where('conclusao', isEqualTo: 'total')
-                    .snapshots(),
-                builder:
-                    (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return new Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  if (snapshot.hasData) {
-                    return new Column(
-                      mainAxisSize: MainAxisSize.max,
-                      verticalDirection: VerticalDirection.down,
-                      children: snapshot.data.documents.map((document) {
-                        if (document['conclusao'] == "sem ajuda") {
-                          return new FlatButton(
-                            child: Column(
-                              children: <Widget>[
-                                new MyCard(
-                                  title: new Text(
-                                    document['procedimento'],
-                                    style: myTextStyle,
-                                  ),
-                                  icon: new Icon(
-                                    Icons.done,
-                                    size: myIconSize,
-                                    color: Colors.deepOrange,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            onPressed: () {
-                              /*
-                              nomeUsuarioSelecionado =
-                                  MenuInicialScreen.nomeUsuarioSelecionado;
-                              usuarioSelecionado = document['usuario'];
-                              atividadeSelecionada = document['procedimento'];
-                              agendadiaSelecionada = document['agendadia'];
-                              agendahoraSelecionada = document['agendahora'];
-                              descricaoSelecionada = document['descricao'];
-                              pontuacaoAtual = document['pontuacaoAtual'];
-                              objetivoSelecionado = document['objetivo'];
-                              documentID = document.documentID;
-                              _openAddEntryDialog();
-                              */
-                            },
-                          ); //Column
-                        } else {
-                          return new FlatButton(
-                            child: Column(
-                              children: <Widget>[
-                                new MyCard(
-                                  title: new Text(
-                                    document['procedimento'],
-                                    style: myTextStyle,
-                                  ),
-                                  icon: new Icon(
-                                    Icons.done,
-                                    size: myIconSize,
-                                    color: Colors.deepOrange,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            onPressed: () {
-                              nomeUsuarioSelecionado =
-                                  MenuInicialScreen.nomeUsuarioSelecionado;
-                              usuarioSelecionado = document['usuario'];
-                              atividadeSelecionada = document['procedimento'];
-                              agendadiaSelecionada = document['agendadia'];
-                              agendahoraSelecionada = document['agendahora'];
-                              descricaoSelecionada = document['descricao'];
-                              pontuacaoAtual = document['pontuacaoAtual'];
-                              documentID = document.documentID;
-                              _openAddEntryDialog();
+                              print("Total clicado");
+                              getModal();
                             },
                           ); //Column
                         }
@@ -760,31 +646,32 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
     );
   }
 
-  getModal() {
-    print("Chamou a funcao");
+  Widget getModal() {
+    return new AlertDialog(actions: <Widget>[Text("Voltar")],content: new Container(child: Text("qwer"),),);
   }
 }
 
 class MyCard extends StatelessWidget {
-  final Widget icon;
+//  final Widget icon;
   final Widget title;
   final Widget subtitle;
 
   // Constructor. {} here denote that they are optional values i.e you can use as: new MyCard()
-  MyCard({this.title, this.icon, this.subtitle});
+  MyCard({this.title, /*this.icon,*/ this.subtitle});
 
   @override
   Widget build(BuildContext context) {
     return new Container(
-      padding: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.all(4.0),
       child: new Card(
         color: Colors.white70,
         child: new Container(
+          width: 850,
           padding: const EdgeInsets.all(10.0),
           child: new Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            textDirection: TextDirection.ltr,
-            children: <Widget>[this.title, this.icon, this.subtitle],
+            //textDirection: TextDirection.ltr,
+            children: <Widget>[this.title, /*this.icon,*/ this.subtitle],
           ),
         ),
       ),
