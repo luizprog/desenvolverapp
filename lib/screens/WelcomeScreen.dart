@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -45,13 +48,29 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     height: animation.value * 100,
                   ),
                 ),
-                Text(
-                  'Desenvolver',
-                  style: TextStyle(
-                      fontSize: 35.0,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.black54),
+                Column(
+                  children: <Widget>[
+                    Text(
+                      'Desenvolver',
+                      style: TextStyle(
+                          fontSize: 35.0,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.black54),
+
+                    ),
+
+                    Text('                           Atividades diarias',
+                      style: TextStyle(fontSize: 12.0,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.blueGrey,  ),
+
+
+
+                    ),
+                  ],
                 ),
+
+
               ],
             ),
             SizedBox(

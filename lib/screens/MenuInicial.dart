@@ -85,13 +85,18 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
     return porcentagemFinal.toString();
   }
 
-  void goToAlunoAtividadesMain(String emailUsuarioSelecionado, String nomeUsuarioSelecionado, String documentID,int pontuacaoAtual, int numeroAtividades) {
-    MenuInicialScreen.usuarioSelecionado = emailUsuarioSelecionado;
-    MenuInicialScreen.nomeUsuarioSelecionado = nomeUsuarioSelecionado;
-    MenuInicialScreen.vUserID = documentID;
-    MenuInicialScreen.pontuacaoAtual = pontuacaoAtual;
-    MenuInicialScreen.numeroAtividades = numeroAtividades;
-    Navigator.pushNamed(context, AlunoAtividadeScreen.ID);
+  void goToAlunoAtividadesMain(
+      String emailUsuarioSelecionado,
+      String nomeUsuarioSelecionado,
+      String documentID,
+      int pontuacaoAtual,
+      int numeroAtividades) {
+      MenuInicialScreen.usuarioSelecionado = emailUsuarioSelecionado;
+      MenuInicialScreen.nomeUsuarioSelecionado = nomeUsuarioSelecionado;
+      MenuInicialScreen.vUserID = documentID;
+      MenuInicialScreen.pontuacaoAtual = pontuacaoAtual;
+      MenuInicialScreen.numeroAtividades = numeroAtividades;
+      Navigator.pushNamed(context, AlunoAtividadeScreen.ID);
   }
 
   _getUsuarioLogadoFromFirestore() async {
@@ -263,7 +268,8 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
                         selectUser = results;
                         print(selectUser.documents.first.data['numeroAtividades']);
                         print('estado');
-                        //print(selectUser.documents.first['usuario']);
+                        //picles
+                        print(selectUser.documents.first['usuario']);
                         goToAlunoAtividadesMain(
                             LoginScreen.usuarioemailLogado, LoginScreen.nomeUsuarioLogado,
                             LoginScreen.vUserIDLogado, selectUser.documents.first.data['pontuacaoAtual'],

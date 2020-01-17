@@ -9,11 +9,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class MenuInicialUsuarioScreen extends StatefulWidget {
   @override
   static String ID = 'MenuInicialUsuario_screen';
-  static String usuarioSelecionado;
-  static String nomeUsuarioSelecionado;
-  static String vUserID;
-  static int pontuacaoAtual;
-  static int numeroAtividades;
+  static String usuarioSelecionado = '';
+  static String nomeUsuarioSelecionado = '';
+  static String vUserID = '';
+  static int pontuacaoAtual = 0;
+  static int numeroAtividades = 0;
   _MenuInicialUsuarioScreenState createState() =>
       _MenuInicialUsuarioScreenState();
 }
@@ -25,7 +25,7 @@ class _MenuInicialUsuarioScreenState extends State<MenuInicialUsuarioScreen> {
   String usuario;
   FirebaseUser loggedInUser;
   String messageText;
-  static String usuarioSelecionado;
+  static String usuarioSelecionado = '';
   static final double myTextSize = 20.0;
   final double myIconSize = 20.0;
   final TextStyle myTextStyle =
@@ -34,6 +34,7 @@ class _MenuInicialUsuarioScreenState extends State<MenuInicialUsuarioScreen> {
   @override
   void initState() {
     super.initState();
+    print('getCurrentUser()');
     getCurrentUser();
   }
 
@@ -41,6 +42,10 @@ class _MenuInicialUsuarioScreenState extends State<MenuInicialUsuarioScreen> {
     try {
       final user = await _auth.currentUser();
       if (user != null) {
+        print('Dados de login ... ');
+        print(user);
+        print(user.email);
+        print('.............. ... ');
         loggedInUser = user;
         usuarioSelecionado = user.email;
       }

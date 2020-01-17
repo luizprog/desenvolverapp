@@ -60,13 +60,17 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
       final user = await _auth.currentUser();
       if (user != null) {
         loggedInUser = user;
+        print("Login usuario alunoatividade.dart 1");
+        print(loggedInUser );
+        print("Login usuario alunoatividade.dart 2");
       }
     } catch (e) {
       print(e);
     }
   }
 
-  void _showDialogConcluir(String s, String t, int x, int pontuacaoAtual, String ProcedimentoID, String UserID,int numeroAtividades) {
+  void _showDialogConcluir(String s, String t, int x, int pontuacaoAtual, String ProcedimentoID, String UserID,int numeroAtividades)
+  {
     // flutter defined function
     String tipoConclusao;
     t = "Finalizar a atividade com a seguinte conclusao:";
@@ -349,17 +353,18 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                 .collection('procedimento')
                 .where('usuario',
                     isEqualTo: MenuInicialScreen.usuarioSelecionado)
-                .where('conclusao', isEqualTo: "pendente")
-                .snapshots(),
+                .where('conclusao', isEqualTo: "pendente").snapshots(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (!snapshot.hasData) {
                 return new Center(
+
                   child: CircularProgressIndicator(),
                 );
               }
 
               if (snapshot.hasData) {
+                print("Tem dados");
                 return new Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
@@ -380,15 +385,19 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                           ],
                         ),
                         onPressed: () {
+                          print("Entrou no clique");
                           nomeUsuarioSelecionado =
                               MenuInicialScreen.nomeUsuarioSelecionado;
-                          usuarioSelecionado = document['usuario'];
-                          atividadeSelecionada = document['procedimento'];
-                          agendadiaSelecionada = document['agendadia'];
+                          usuarioSelecionado = document['usuario'].toString();
+                          atividadeSelecionada = document['procedimento'].toString();
+                          agendadiaSelecionada = document['agendadia'].toString();
                           agendahoraSelecionada = document['agendahora'];
-                          descricaoSelecionada = document['descricao'];
+                          descricaoSelecionada = document['descricao'].toString();
                           pontuacaoAtual = document['pontuacaoAtual'];
-                          objetivoSelecionado =  document['objetivo'];
+                          objetivoSelecionado =  document['objetivo'].toString();
+                          print("ID documento 1");
+                          print(document.documentID);
+                          print("ID documento 2");
                           documentID = document.documentID;
                           _openAddEntryDialog();
                         },
@@ -414,15 +423,16 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                         ),
                         onPressed: () {
                           setState(() {
+                            print('Entrou no segundo on pressed');
                             nomeUsuarioSelecionado =
                                 MenuInicialScreen.nomeUsuarioSelecionado;
-                            usuarioSelecionado = document['usuario'];
-                            atividadeSelecionada = document['procedimento'];
-                            agendadiaSelecionada = document['agendadia'];
-                            agendahoraSelecionada = document['agendahora'];
-                            descricaoSelecionada = document['descricao'];
-                            pontuacaoAtual = document['pontuacaoAtual'];
-                            objetivoSelecionado = document['objetivo'];
+                            usuarioSelecionado = document['usuario'].toString();
+                            atividadeSelecionada = document['procedimento'].toString();
+                            agendadiaSelecionada = document['agendadia'].toString();
+                            //agendahoraSelecionada = document['agendahora'];
+                            descricaoSelecionada = document['descricao'].toString();
+                            //pontuacaoAtual =  document['pontuacaoAtual'];
+                            objetivoSelecionado = document['objetivo'].toString();
                             documentID = document.documentID;
                             setState(() {
                               _openAddEntryDialog();
@@ -447,11 +457,11 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                     .collection('procedimentosDiarios')
                     .where('usuario',
                     isEqualTo: MenuInicialScreen.vUserID)
-                    .where('conclusao', isEqualTo: 'sem ajuda').orderBy('id')
-                    .snapshots(),
+                    .where('conclusao', isEqualTo: 'sem ajuda').snapshots(),
                 builder:
                     (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (!snapshot.hasData) {
+                    print('Nao tem dados sem ajuda');
                     return new Center(
                       child: CircularProgressIndicator(),
                     );
@@ -518,11 +528,11 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                     .collection('procedimentosDiarios')
                     .where('usuario',
                     isEqualTo: MenuInicialScreen.vUserID)
-                    .where('conclusao', isEqualTo: 'parcial').orderBy('id')
-                    .snapshots(),
+                    .where('conclusao', isEqualTo: 'parcial').snapshots(),
                 builder:
                     (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (!snapshot.hasData) {
+                    print('Nao tem dados parciais');
                     return new Center(
                       child: CircularProgressIndicator(),
                     );
