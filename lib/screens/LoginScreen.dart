@@ -158,7 +158,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       try {
                         getUsuarioEmail();
                       } catch (e) {
-                        print("Erro");
                         print(e);
                       }
                       getUsuarioPermisssao();
@@ -173,7 +172,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       } catch (e) {
                         _auth.signOut();
                         AlertDialog(title: Text("Falha ao tentar efetuar o login, verifique os dados informados!"),);
-                        print("Erro");
                         print(e);
                       }
                     },

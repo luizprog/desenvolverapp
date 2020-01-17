@@ -34,7 +34,6 @@ class _MenuInicialUsuarioScreenState extends State<MenuInicialUsuarioScreen> {
   @override
   void initState() {
     super.initState();
-    print('getCurrentUser()');
     getCurrentUser();
   }
 
@@ -42,10 +41,6 @@ class _MenuInicialUsuarioScreenState extends State<MenuInicialUsuarioScreen> {
     try {
       final user = await _auth.currentUser();
       if (user != null) {
-        print('Dados de login ... ');
-        print(user);
-        print(user.email);
-        print('.............. ... ');
         loggedInUser = user;
         usuarioSelecionado = user.email;
       }
@@ -78,7 +73,6 @@ class _MenuInicialUsuarioScreenState extends State<MenuInicialUsuarioScreen> {
                 mainAxisSize: MainAxisSize.max,
                 verticalDirection: VerticalDirection.down,
                 children: snapshot.data.documents.map((document) {
-                  print(document['conclusao'].toString());
                   if (document['conclusao'] == "sucesso") {
                     return new Column(
                       children: <Widget>[

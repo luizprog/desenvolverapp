@@ -266,10 +266,7 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
                   onPressed: () {
                     _getUsuarioLogadoFromFirestore().then((results){
                         selectUser = results;
-                        print(selectUser.documents.first.data['numeroAtividades']);
-                        print('estado');
-                        //picles
-                        print(selectUser.documents.first['usuario']);
+
                         goToAlunoAtividadesMain(
                             LoginScreen.usuarioemailLogado, LoginScreen.nomeUsuarioLogado,
                             LoginScreen.vUserIDLogado, selectUser.documents.first.data['pontuacaoAtual'],

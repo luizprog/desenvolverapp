@@ -38,7 +38,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
   String descricaoSelecionada;
   String objetivoSelecionado;
   String documentID;
-  int    agendahoraSelecionada;
+  String    agendahoraSelecionada;
   int    pontuacaoAtual = 0;
   int    qtde;
   FirebaseUser loggedInUser;
@@ -60,9 +60,6 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
       final user = await _auth.currentUser();
       if (user != null) {
         loggedInUser = user;
-        print("Login usuario alunoatividade.dart 1");
-        print(loggedInUser );
-        print("Login usuario alunoatividade.dart 2");
       }
     } catch (e) {
       print(e);
@@ -98,9 +95,12 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
             new FlatButton(
               child: new Text("Concluir"),
               onPressed: () {
+                var acertos, acertosAgora;
+                acertosAgora=0;
                 //pontuacaoAtual = 100;
                 if(x > 90) {
                   tipoConclusao = 'sem ajuda';
+                  acertosAgora = 1;
                 }
                 if (x > 0 && x < 100 )
                 {
@@ -114,29 +114,36 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
 
                 var Quantidade;
                 var document = Firestore.instance
-                .collection('procedimento')
-                .where('usuario',isEqualTo: MenuInicialScreen.usuarioSelecionado)
-                .where('conclusao', isEqualTo: "pendente")
-                .buildArguments();
+                .collection('procedimento');
 
-                var qwerty;
-                qwerty = document['entregasHoje'];
-                if(document['entregasHoje'] != null){
-                  Quantidade = entreguesNoDiaDeHoje;
-                }
-                else{
-                  Quantidade = 0;
-                }
+                var d = document.where('procedimento', isEqualTo: 'p1').buildArguments();
 
-                  Quantidade = Quantidade + 1;
+
+
+
+                print('Acertos');
+
+//picles
+                print(acertos);
+                print(acertosAgora);
+                print(d['procedimento']);
+                print('print Final');
+                if(acertos == null){
+                  acertos = 0;
+                  acertos = acertos + acertosAgora;
+                }
+                //acertos = acertos+acertosAgora;
+
+
+
                   Firestore.instance
                       .collection("procedimento")
                       .document(ProcedimentoID)
-                      .updateData({"entregasHoje": Quantidade, 'dataEntrega': now});
+                      .updateData({"entregasHoje": Quantidade, 'dataEntrega': now, 'acertos':acertos});
 
                   //adicionando atividade diaria
-                  Firestore.instance.collection('entregaProcedimento').add({
-                    'id': ProcedimentoID,
+                  Firestore.instance.collection('procedimentosEntregues').add({
+                    'id': ProcedimentoID + TimeOfDay.now().toString(),
                     'procedimento': atividadeSelecionada,
                     'usuario':UserID,
                     'dataEntrega':now,
@@ -364,7 +371,6 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
               }
 
               if (snapshot.hasData) {
-                print("Tem dados");
                 return new Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
@@ -385,19 +391,15 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                           ],
                         ),
                         onPressed: () {
-                          print("Entrou no clique");
                           nomeUsuarioSelecionado =
                               MenuInicialScreen.nomeUsuarioSelecionado;
                           usuarioSelecionado = document['usuario'].toString();
                           atividadeSelecionada = document['procedimento'].toString();
                           agendadiaSelecionada = document['agendadia'].toString();
-                          agendahoraSelecionada = document['agendahora'];
+                          agendahoraSelecionada = document['agendahora'].toString();
                           descricaoSelecionada = document['descricao'].toString();
                           pontuacaoAtual = document['pontuacaoAtual'];
                           objetivoSelecionado =  document['objetivo'].toString();
-                          print("ID documento 1");
-                          print(document.documentID);
-                          print("ID documento 2");
                           documentID = document.documentID;
                           _openAddEntryDialog();
                         },
@@ -423,15 +425,14 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                         ),
                         onPressed: () {
                           setState(() {
-                            print('Entrou no segundo on pressed');
                             nomeUsuarioSelecionado =
                                 MenuInicialScreen.nomeUsuarioSelecionado;
                             usuarioSelecionado = document['usuario'].toString();
                             atividadeSelecionada = document['procedimento'].toString();
                             agendadiaSelecionada = document['agendadia'].toString();
-                            //agendahoraSelecionada = document['agendahora'];
+                            agendahoraSelecionada = document['agendahora'].toString();
                             descricaoSelecionada = document['descricao'].toString();
-                            //pontuacaoAtual =  document['pontuacaoAtual'];
+                            pontuacaoAtual =  document['pontuacaoAtual'];
                             objetivoSelecionado = document['objetivo'].toString();
                             documentID = document.documentID;
                             setState(() {
@@ -461,7 +462,6 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                 builder:
                     (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (!snapshot.hasData) {
-                    print('Nao tem dados sem ajuda');
                     return new Center(
                       child: CircularProgressIndicator(),
                     );
@@ -532,7 +532,6 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                 builder:
                     (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (!snapshot.hasData) {
-                    print('Nao tem dados parciais');
                     return new Center(
                       child: CircularProgressIndicator(),
                     );
@@ -638,7 +637,6 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                               ],
                             ),
                             onPressed: () {
-                              print("Total clicado");
                               getModal();
                             },
                           ); //Column
