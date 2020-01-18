@@ -455,7 +455,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
               padding: EdgeInsets.symmetric(horizontal: 24.0),
               child: StreamBuilder(
                 stream: Firestore.instance
-                    .collection('procedimentosDiarios')
+                    .collection('procedimentosEntregues')
                     .where('usuario',
                     isEqualTo: MenuInicialScreen.vUserID)
                     .where('conclusao', isEqualTo: 'sem ajuda').snapshots(),
@@ -525,7 +525,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
               padding: EdgeInsets.symmetric(horizontal: 24.0),
               child: StreamBuilder(
                 stream: Firestore.instance
-                    .collection('procedimentosDiarios')
+                    .collection('procedimentosEntregues')
                     .where('usuario',
                     isEqualTo: MenuInicialScreen.vUserID)
                     .where('conclusao', isEqualTo: 'parcial').snapshots(),
@@ -590,7 +590,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
               padding: EdgeInsets.symmetric(horizontal: 24.0),
               child: StreamBuilder(
                 stream: Firestore.instance
-                    .collection('procedimentosDiarios')
+                    .collection('procedimentosEntregues')
                     .where('usuario',
                     isEqualTo: MenuInicialScreen.vUserID)
                     .where('conclusao', isEqualTo: 'total').snapshots(),
