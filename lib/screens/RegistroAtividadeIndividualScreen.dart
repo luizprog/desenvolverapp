@@ -23,6 +23,7 @@ class _RegistroAtividadeIndividualScreenState
   var _mySelection2;
   var _mySelection3;
   var _mySelection4;
+  var _mySelection5;
 
   List<String> _comboTipo = new List<String>();
   bool showSpinner = false;
@@ -39,6 +40,8 @@ class _RegistroAtividadeIndividualScreenState
   String tipoConclusaoInformado;
   String instrutorInformado;
   String objetivoInformado;
+  String acertoNecessarioInformado;
+  String grupoProcedimentoInformado;
 
   String dropdownValue = 'One';
 
@@ -287,6 +290,7 @@ class _RegistroAtividadeIndividualScreenState
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
               ),
             ),
+
             SizedBox(
               height: 8.0,
             ),
@@ -353,6 +357,7 @@ class _RegistroAtividadeIndividualScreenState
                   return new DropdownButton<String>(
                     iconEnabledColor: Colors.black,
                     isDense: true,
+
                     isExpanded: true,
                     hint: new Text(
                       "Dias",
@@ -380,10 +385,6 @@ class _RegistroAtividadeIndividualScreenState
               ),
             ),
 
-            SizedBox(
-              height: 48.0,
-            ),
-
             Center(
               child: Text(
                 "Quantidade de vezes por dia:",
@@ -391,53 +392,8 @@ class _RegistroAtividadeIndividualScreenState
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
               ),
             ),
-            SizedBox(
-              height: 8.0,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                  border: Border.all(
-                      style: BorderStyle.solid,
-                      color: Colors.blueAccent,
-                      width: 1.0)),
-              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
-              child: StreamBuilder<QuerySnapshot>(
-                stream: firestore.collection('horaAtividade').orderBy('hora').snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) return const Text('Carregando...');
-                  return new DropdownButton<String>(
-                    iconEnabledColor: Colors.black,
-                    iconSize: 30.0,
-                    isExpanded: true,
-                    isDense: true,
-                    hint: new Text(
-                      "vezes por dia",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    value: _mySelection4,
-                    onChanged: (String newValue) {
-                      setState(() {
-                        this.agendaHoraInformado = newValue;
-                        _mySelection4 = newValue;
-                      });
-                    },
-                    items: snapshot.data.documents.map((map) {
-                      return new DropdownMenuItem<String>(
-                        value: map["hora"].toString(),
-                        child: new Text(map["hora"],
-                            style: TextStyle(color: Colors.blueAccent)),
-                      );
-                    }).toList(),
-                  );
-                },
-              ),
-            ),
 
-            SizedBox(
-              height: 48.0,
-            ),
+
 
             Center(
               child: Text(
@@ -490,6 +446,100 @@ class _RegistroAtividadeIndividualScreenState
               ),
             ),
 
+            /**/
+
+            SizedBox(
+              height: 48.0,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  border: Border.all(
+                      style: BorderStyle.solid,
+                      color: Colors.blueAccent,
+                      width: 1.0)),
+              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: firestore.collection('AcertosNecessarios').orderBy('acertos').snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) return const Text('Carregando...');
+                  return new DropdownButton<String>(
+                    iconEnabledColor: Colors.black,
+                    iconSize: 30.0,
+                    isExpanded: true,
+                    isDense: true,
+                    hint: new Text(
+                      "Acertos",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    value: _mySelection4,
+                    onChanged: (String newValue) {
+                      setState(() {
+                        this.acertoNecessarioInformado = newValue;
+                        _mySelection4 = newValue;
+                      });
+                    },
+                    items: snapshot.data.documents.map((map) {
+                      return new DropdownMenuItem<String>(
+                        value: map["acertos"].toString(),
+                        child: new Text(map["acertos"],
+                            style: TextStyle(color: Colors.blueAccent)),
+                      );
+                    }).toList(),
+                  );
+                },
+              ),
+            ),
+
+            SizedBox(
+              height: 48.0,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  border: Border.all(
+                      style: BorderStyle.solid,
+                      color: Colors.blueAccent,
+                      width: 1.0)),
+              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: firestore.collection('grupoProcedimento').orderBy('habilidade').snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) return const Text('Carregando...');
+                  return new DropdownButton<String>(
+                    iconEnabledColor: Colors.black,
+                    iconSize: 30.0,
+                    isExpanded: true,
+                    isDense: true,
+                    hint: new Text(
+                      "Habilidade",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    value: _mySelection5,
+                    onChanged: (String newValue) {
+                      setState(() {
+                        this.grupoProcedimentoInformado = newValue;
+                        _mySelection5 = newValue;
+                      });
+                    },
+                    items: snapshot.data.documents.map((map) {
+                      return new DropdownMenuItem<String>(
+                        value: map["habilidade"].toString(),
+                        child: new Text(map["habilidade"],
+                            style: TextStyle(color: Colors.blueAccent)),
+                      );
+                    }).toList(),
+                  );
+                },
+              ),
+            ),
+
+            /**/
+
+
+
             //button save
             SizedBox(
               height: 64.0,
@@ -516,6 +566,8 @@ class _RegistroAtividadeIndividualScreenState
                         'agendahora': agendaHoraInformado,
                         'dataDaInclusao': DateTime.now(),
                         'instrutor': regloggedInUser.email,
+                        'acertosNecessarios': acertoNecessarioInformado,
+                        'grupoProcedimento': grupoProcedimentoInformado,
                         'pontuacao': 0,
                         'pontuacaoAtual': 0
                       });
