@@ -26,8 +26,8 @@ class AlunoAtividadeScreen extends StatefulWidget {
 
 class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
   final _auth = FirebaseAuth.instance;
-  bool showSpinner = false;
-  bool TemDados;
+  bool   showSpinner = false;
+  bool   TemDados;
   String senha;
   String usuario;
   String messageText;
@@ -38,15 +38,15 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
   String descricaoSelecionada;
   String objetivoSelecionado;
   String documentID;
-  String    agendahoraSelecionada;
+  String agendahoraSelecionada;
   int    pontuacaoAtual = 0;
   int    qtde;
   FirebaseUser loggedInUser;
   var diasEntrega;
   var entreguesNoDiaDeHoje;
   static final double myTextSize = 15.0;
-  final double myIconSize = 12.0;
-  final TextStyle myTextStyle =
+  final  double    myIconSize  = 12.0;
+  final  TextStyle myTextStyle =
       new TextStyle(color: Colors.black, fontSize: myTextSize);
 
   @override
@@ -111,31 +111,14 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                   tipoConclusao = 'total';
                 }
                 DateTime now = DateTime.now();
-
                 var Quantidade;
                 var document = Firestore.instance
                 .collection('procedimento');
-
                 var d = document.where('procedimento', isEqualTo: 'p1').buildArguments();
-
-
-
-
-                print('Acertos');
-
-//picles
-                print(acertos);
-                print(acertosAgora);
-                print(d['procedimento']);
-                print('print Final');
                 if(acertos == null){
                   acertos = 0;
                   acertos = acertos + acertosAgora;
                 }
-                //acertos = acertos+acertosAgora;
-
-
-
                   Firestore.instance
                       .collection("procedimento")
                       .document(ProcedimentoID)
@@ -172,13 +155,10 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
     }
     var x = (numAtividades * 100) - pontosAtual;
     var y = (x / pontosAtual) * 100;
-
     if (y < 0) {
       y = y * (-1);
     }
-
     var porcentagemFinal = 100 - y.round();
-
     return porcentagemFinal.toString();
   }
 
@@ -321,8 +301,6 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
         fullscreenDialog: true));
   }
 
-
-
   Widget build(BuildContext context) {
     //final _kTabPages = <Widget>[
       //Center(child: Icon(Icons.done, size: 24.0, color: Colors.teal)),
@@ -369,7 +347,6 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                   child: CircularProgressIndicator(),
                 );
               }
-
               if (snapshot.hasData) {
                 return new Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -391,21 +368,19 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                           ],
                         ),
                         onPressed: () {
-                          nomeUsuarioSelecionado =
-                              MenuInicialScreen.nomeUsuarioSelecionado;
-                          usuarioSelecionado = document['usuario'].toString();
-                          atividadeSelecionada = document['procedimento'].toString();
-                          agendadiaSelecionada = document['agendadia'].toString();
-                          agendahoraSelecionada = document['agendahora'].toString();
-                          descricaoSelecionada = document['descricao'].toString();
-                          pontuacaoAtual = document['pontuacaoAtual'];
-                          objetivoSelecionado =  document['objetivo'].toString();
-                          documentID = document.documentID;
+                          nomeUsuarioSelecionado = MenuInicialScreen.nomeUsuarioSelecionado;
+                          usuarioSelecionado     = document['usuario'].toString();
+                          atividadeSelecionada   = document['procedimento'].toString();
+                          agendadiaSelecionada   = document['agendadia'].toString();
+                          agendahoraSelecionada  = document['agendahora'].toString();
+                          descricaoSelecionada   = document['descricao'].toString();
+                          pontuacaoAtual         = document['pontuacaoAtual'];
+                          objetivoSelecionado    = document['objetivo'].toString();
+                          documentID             = document.documentID;
                           _openAddEntryDialog();
                         },
                       ); //Column
                     } else {
-
                       return new FlatButton(
                         child: Column(
                           children: <Widget>[
@@ -414,11 +389,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                                 document['procedimento'],
                                 style: myTextStyle,
                               ),
-
-                              //icon: new Icon(Icons.chevron_right,size: myIconSize,color: Colors.transparent,),
-
-                              subtitle: Text(document['agendahora'].toString()/*_getAtividadesRestantes(document['agendahora']
-                                  ,document['entregasHoje'])*/
+                              subtitle: Text(document['agendahora'].toString()
                                 , style: myTextStyle, ),
                             ),
                           ],
@@ -476,19 +447,13 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                                  new MyCard(
                                    subtitle: Text(""),
                                    title: new Text(
-                                       // ignore: missing_return
                                        document['procedimento'].toString() + ' • ' + formatDate(DateTime.fromMillisecondsSinceEpoch(document['dataEntrega'].seconds * 1000), [dd,'/',mm,'/',yyyy,' ',HH,':',nn ]) ,
-                                     //picles
-                                     // + ' - '+ document['procedimento'],
-
                                      style: myTextStyle,
                                    ),
-                                   //icon: new Icon(Icons.done_all,size: myIconSize,color: Colors.greenAccent,),
                                  ),
                                ],
                              ),
                              onPressed: () {
-
                                print(document['dataEntrega'].toString());
                                print("Sem ajuda clicado!");
                              },
@@ -503,7 +468,6 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                                      document['procedimento'].toString() + ' • ' + formatDate(DateTime.fromMillisecondsSinceEpoch(document['dataEntrega'].seconds * 1000), [dd,'/',mm,'/',yyyy,' ',HH,':',nn ]) ,
                                      style: myTextStyle,
                                    ),
-                                   //icon: new Icon(Icons.done_all,size: myIconSize,color: Colors.greenAccent,),
                                  ),
                                ],
                              ),
@@ -550,7 +514,6 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                                     document['procedimento'].toString() + ' • ' + formatDate(DateTime.fromMillisecondsSinceEpoch(document['dataEntrega'].seconds * 1000), [dd,'/',mm,'/',yyyy,' ',HH,':',nn ]) ,
                                     style: myTextStyle,
                                   ),
-                                  //icon: new Icon(Icons.done,size: myIconSize,color: Colors.lightBlueAccent,),
                                 ),
                               ],
                             ),
@@ -568,7 +531,6 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                                     document['procedimento'].toString() + ' • ' + formatDate(DateTime.fromMillisecondsSinceEpoch(document['dataEntrega'].seconds * 1000), [dd,'/',mm,'/',yyyy,' ',HH,':',nn ]) ,
                                     style: myTextStyle,
                                   ),
-                                  //icon: new Icon(Icons.done,size: myIconSize,color: Colors.lightBlueAccent,),
                                 ),
                               ],
                             ),
@@ -632,7 +594,6 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                                     document['procedimento'].toString(),
                                     style: myTextStyle,
                                   ),
-                                  //icon: new Icon(Icons.done,size: myIconSize,color: Colors.deepOrange,),
                                 ),
                               ],
                             ),
@@ -664,7 +625,6 @@ class MyCard extends StatelessWidget {
   final Widget title;
   final Widget subtitle;
 
-  // Constructor. {} here denote that they are optional values i.e you can use as: new MyCard()
   MyCard({this.title, /*this.icon,*/ this.subtitle});
 
   @override
@@ -678,8 +638,7 @@ class MyCard extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           child: new Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //textDirection: TextDirection.ltr,
-            children: <Widget>[this.title, /*this.icon,*/ this.subtitle],
+            children: <Widget>[this.title, this.subtitle],
           ),
         ),
       ),

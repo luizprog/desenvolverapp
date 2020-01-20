@@ -16,13 +16,13 @@ class DesenvolverApp extends StatelessWidget {
         theme: ThemeData.light().copyWith(textTheme: TextTheme(body1: TextStyle(color: Colors.white30),),),
         initialRoute: WelcomeScreen.ID,
       routes: {
-        WelcomeScreen.ID: (context)            => WelcomeScreen(),
-        LoginScreen.ID: (context)              => LoginScreen(),
-        RegistrationScreen.ID: (context)       => RegistrationScreen(),
-        MenuInicialScreen.ID: (context)        => MenuInicialScreen(),
-        MenuInicialUsuarioScreen.ID: (context) => MenuInicialUsuarioScreen(),
+        WelcomeScreen.ID: (context)                     => WelcomeScreen(),
+        LoginScreen.ID: (context)                       => LoginScreen(),
+        RegistrationScreen.ID: (context)                => RegistrationScreen(),
+        MenuInicialScreen.ID: (context)                 => MenuInicialScreen(),
+        MenuInicialUsuarioScreen.ID: (context)          => MenuInicialUsuarioScreen(),
         RegistroAtividadeIndividualScreen.ID: (context) => RegistroAtividadeIndividualScreen(),
-        AlunoAtividadeScreen.ID: (context)     => AlunoAtividadeScreen(),
+        AlunoAtividadeScreen.ID: (context)              => AlunoAtividadeScreen(),
       },
     );
   }

@@ -15,15 +15,15 @@ class RegistroAtividadeIndividualScreen extends StatefulWidget {
 
 class _RegistroAtividadeIndividualScreenState
     extends State<RegistroAtividadeIndividualScreen> {
-  final _auth = FirebaseAuth.instance;
+  final _auth      = FirebaseAuth.instance;
   final _firestore = Firestore.instance;
-  final firestore = Firestore.instance;
+  final firestore  = Firestore.instance;
   FirebaseUser regloggedInUser;
   var _mySelection;
   var _mySelection2;
   var _mySelection3;
   List<String> _comboTipo = new List<String>();
-  bool showSpinner = false;
+  bool   showSpinner = false;
   String usuario;
   String senha;
   String tipo;

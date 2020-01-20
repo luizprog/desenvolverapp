@@ -557,17 +557,17 @@ class _RegistroAtividadeIndividualScreenState
 
                     try {
                       _firestore.collection('procedimento').add({
-                        'usuario': nomeInformado,
-                        'procedimento': procedimentoInformado,
-                        'descricao': descricaoInformado,
-                        'objetivo': objetivoInformado,
-                        'conclusao': tipoConclusaoInformado,
-                        'agendadia': agendaDiaInformado,
-                        'agendahora': agendaHoraInformado,
-                        'dataDaInclusao': DateTime.now(),
-                        'instrutor': regloggedInUser.email,
+                        'usuario':            nomeInformado,
+                        'procedimento':       procedimentoInformado,
+                        'descricao':          descricaoInformado,
+                        'objetivo':           objetivoInformado,
+                        'conclusao':          tipoConclusaoInformado,
+                        'agendadia':          agendaDiaInformado,
+                        'agendahora':         agendaHoraInformado,
+                        'dataDaInclusao':     DateTime.now(),
+                        'instrutor':          regloggedInUser.email,
                         'acertosNecessarios': acertoNecessarioInformado,
-                        'grupoProcedimento': grupoProcedimentoInformado,
+                        'grupoProcedimento':  grupoProcedimentoInformado,
                         'pontuacao': 0,
                         'pontuacaoAtual': 0
                       });
