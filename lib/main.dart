@@ -20,7 +20,7 @@ class DesenvolverApp extends StatelessWidget {
         LoginScreen.ID: (context)                       => LoginScreen(),
         RegistrationScreen.ID: (context)                => RegistrationScreen(),
         MenuInicialScreen.ID: (context)                 => MenuInicialScreen(),
-        MenuInicialUsuarioScreen.ID: (context)          => MenuInicialUsuarioScreen(),
+        //MenuInicialUsuarioScreen.ID: (context)          => MenuInicialUsuarioScreen(),
         RegistroAtividadeIndividualScreen.ID: (context) => RegistroAtividadeIndividualScreen(),
         AlunoAtividadeScreen.ID: (context)              => AlunoAtividadeScreen(),
       },

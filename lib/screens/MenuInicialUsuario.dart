@@ -8,12 +8,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MenuInicialUsuarioScreen extends StatefulWidget {
   @override
-  static String ID = 'MenuInicialUsuario_screen';
+ /* static String ID = 'MenuInicialUsuario_screen';
   static String usuarioSelecionado = '';
   static String nomeUsuarioSelecionado = '';
   static String vUserID = '';
   static int pontuacaoAtual = 0;
-  static int numeroAtividades = 0;
+  static int numeroAtividades = 0;*/
   _MenuInicialUsuarioScreenState createState() =>
       _MenuInicialUsuarioScreenState();
 }
@@ -34,9 +34,12 @@ class _MenuInicialUsuarioScreenState extends State<MenuInicialUsuarioScreen> {
   @override
   void initState() {
     super.initState();
-    getCurrentUser();
+    //getCurrentUser();
   }
-
+  Widget build(BuildContext context) {
+    return Scaffold();}
+  }
+/*
   void getCurrentUser() async {
     try {
       final user = await _auth.currentUser();
@@ -118,7 +121,7 @@ class _MenuInicialUsuarioScreenState extends State<MenuInicialUsuarioScreen> {
   getModal() {
     print("Chamou a funcao");
   }
-}
+}*/
 
 class MyCard extends StatelessWidget {
   final Widget icon;

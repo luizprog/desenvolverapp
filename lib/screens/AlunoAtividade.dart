@@ -99,6 +99,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
               onPressed: () {
                 var acertos, acertosAgora;
                 acertosAgora=0;
+
                 //pontuacaoAtual = 100;
                 if(x > 90) {
                   tipoConclusao = 'sem ajuda';
@@ -114,30 +115,12 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                 }
                 DateTime now = DateTime.now();
                 var Quantidade;
-                var document = Firestore.instance
-                .collection('procedimento');
-                var d = document.where('procedimento', isEqualTo: 'p1').buildArguments();
-                getUsuarioAcertos(documentID, MenuInicialScreen.loggedInUser.email);
                 
-                acertos = 0;
-                acerto = acerto == null?0:acerto; 
-                acertos = acerto;
-                print('Nova quantidade de acertos:');
-                print(acertos);
-                print(' QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ');
-                //print('Chegou no call dialog concluir');
-                //print(documentID);
-                //print( MenuInicialScreen.usuarioSelecionado);
+                setState(() {
+                    getUsuarioAcertos(documentID, MenuInicialScreen.loggedInUser.email,Quantidade,now, acertosAgora);                    
+                });
                 
 
-                /*
-                print('Chegou no call dialog concluir');
-                getUsuarioAcertos(documentID, MenuInicialScreen.currentUser);
-                */ 
-                Firestore.instance
-                      .collection("procedimento")
-                      .document(ProcedimentoID)
-                      .updateData({"entregasHoje": Quantidade, 'dataEntrega': now, 'acertos': acertos});
 
                   //adicionando atividade diaria
                   Firestore.instance.collection('procedimentosEntregues').add({
@@ -167,15 +150,31 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
 
   /**/
 
-  void getUsuarioAcertos(String idProcedimento, String idUsuario) async {
-    final acertoDocumento = await Firestore.instance.collection('procedimento').where('usuario',isEqualTo: idUsuario).getDocuments();
-    
+  void getUsuarioAcertos(String idProcedimento, String idUsuario,int Quantidade,DateTime now, int acertosAgora) async {
+    final acertoDocumento = 
+    await Firestore.instance.collection("procedimento").where('usuario',isEqualTo: idUsuario).getDocuments();
+
     for (var acertoDocumentoFor in acertoDocumento.documents) {
       if(acertoDocumentoFor.documentID.toString() == idProcedimento.toString())
       {
-        setState(() {
-          acerto = int.parse(acertoDocumentoFor.data['acertos']);
-        }); 
+        
+          print('Acertos na funcao getUsuarioAcertos');
+          
+          print(idUsuario);
+          acerto = acertoDocumentoFor.data['acertos'];
+          print(acerto);
+          if(acerto!=null){
+            if(acertosAgora>0){
+              acerto = int.parse(acerto.toString())+acertosAgora;
+            }
+            Firestore.instance
+            .collection("procedimento")
+            .document(idProcedimento)
+            .updateData({"entregasHoje": Quantidade, 'dataEntrega': now, 'acertos': acerto});
+          }else{
+            print("Nao foi possivel atualizar, acertos estao nulo!");
+          }
+         
       }
     }
   }
@@ -386,6 +385,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                   mainAxisSize: MainAxisSize.max,
                   verticalDirection: VerticalDirection.down,
                   children: snapshot.data.documents.map((document) {
+                    
                     if (document['conclusao'] == "sem ajuda") {
                       return new FlatButton(
                         child:  Column(
@@ -414,6 +414,10 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                         },
                       ); //Column
                     } else {
+                      print(document.documentID);
+                      print(document['acertos']);
+                      print(document['acertos'] != int.parse(document['acertosNecessarios']));
+                      if(document['acertos'] != int.parse(document['acertosNecessarios'])){
                       return new FlatButton(
                         child: Column(
                           children: <Widget>[
@@ -422,7 +426,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                                 document['procedimento'],
                                 style: myTextStyle,
                               ),
-                              subtitle: Text(document['agendahora'].toString()
+                              subtitle: Text(document['acertos'].toString()+'/'+document['acertosNecessarios'].toString()
                                 , style: myTextStyle, ),
                             ),
                           ],
@@ -445,6 +449,11 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                           });
                         },
                       ); //Column
+                    }else{
+                      return new Text(''
+                      );
+                    }
+                    
                     }
                   }).toList(),
                 ); //ListView
