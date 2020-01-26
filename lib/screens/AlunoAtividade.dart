@@ -380,6 +380,9 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                 );
               }
               if (snapshot.hasData) {
+                
+                  
+ 
                 return new Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
@@ -414,10 +417,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                         },
                       ); //Column
                     } else {
-                      print(document.documentID);
-                      print(document['acertos']);
-                      print(document['acertos'] != int.parse(document['acertosNecessarios']));
-                      if(document['acertos'] != int.parse(document['acertosNecessarios'])){
+                      if(int.parse(document['acertos'].toString()) != int.parse(document['acertosNecessarios'].toString())){
                       return new FlatButton(
                         child: Column(
                           children: <Widget>[
@@ -457,7 +457,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                     }
                   }).toList(),
                 ); //ListView
-              }
+                }
             },
           ),
         ),

@@ -41,6 +41,7 @@ class _RegistroAtividadeIndividualScreenState
   String instrutorInformado;
   String objetivoInformado;
   String acertoNecessarioInformado;
+  String acertos;
   String grupoProcedimentoInformado;
 
   String dropdownValue = 'One';
@@ -556,6 +557,7 @@ class _RegistroAtividadeIndividualScreenState
                     });
 
                     try {
+                      acertos='0';
                       _firestore.collection('procedimento').add({
                         'usuario':            nomeInformado,
                         'procedimento':       procedimentoInformado,
@@ -567,6 +569,7 @@ class _RegistroAtividadeIndividualScreenState
                         'dataDaInclusao':     DateTime.now(),
                         'instrutor':          regloggedInUser.email,
                         'acertosNecessarios': acertoNecessarioInformado,
+                        'acertos': int.parse(acertos.toString()),
                         'grupoProcedimento':  grupoProcedimentoInformado,
                         'pontuacao': 0,
                         'pontuacaoAtual': 0
