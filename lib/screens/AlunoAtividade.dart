@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:ui' as prefix0;
 
 import 'package:desenvolverapp/screens/DialogAtividade.dart';
+import 'package:desenvolverapp/screens/LoginScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,6 +27,7 @@ class AlunoAtividadeScreen extends StatefulWidget {
 
 class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
   final _auth = FirebaseAuth.instance;
+  static int acerto;
   bool   showSpinner = false;
   bool   TemDados;
   String senha;
@@ -115,14 +117,27 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                 var document = Firestore.instance
                 .collection('procedimento');
                 var d = document.where('procedimento', isEqualTo: 'p1').buildArguments();
-                if(acertos == null){
-                  acertos = 0;
-                  acertos = acertos + acertosAgora;
-                }
-                  Firestore.instance
+                getUsuarioAcertos(documentID, MenuInicialScreen.loggedInUser.email);
+                
+                acertos = 0;
+                acerto = acerto == null?0:acerto; 
+                acertos = acerto;
+                print('Nova quantidade de acertos:');
+                print(acertos);
+                print(' QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ');
+                //print('Chegou no call dialog concluir');
+                //print(documentID);
+                //print( MenuInicialScreen.usuarioSelecionado);
+                
+
+                /*
+                print('Chegou no call dialog concluir');
+                getUsuarioAcertos(documentID, MenuInicialScreen.currentUser);
+                */ 
+                Firestore.instance
                       .collection("procedimento")
                       .document(ProcedimentoID)
-                      .updateData({"entregasHoje": Quantidade, 'dataEntrega': now, 'acertos':acertos});
+                      .updateData({"entregasHoje": Quantidade, 'dataEntrega': now, 'acertos': acertos});
 
                   //adicionando atividade diaria
                   Firestore.instance.collection('procedimentosEntregues').add({
@@ -146,8 +161,26 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
     );
   }
   void _callDialogConcluir(String s1, String s2, int x){
+
     _showDialogConcluir(s1, s2, x,MenuInicialScreen.pontuacaoAtual  ,documentID ,MenuInicialScreen.vUserID,MenuInicialScreen.numeroAtividades);
   }
+
+  /**/
+
+  void getUsuarioAcertos(String idProcedimento, String idUsuario) async {
+    final acertoDocumento = await Firestore.instance.collection('procedimento').where('usuario',isEqualTo: idUsuario).getDocuments();
+    
+    for (var acertoDocumentoFor in acertoDocumento.documents) {
+      if(acertoDocumentoFor.documentID.toString() == idProcedimento.toString())
+      {
+        setState(() {
+          acerto = int.parse(acertoDocumentoFor.data['acertos']);
+        }); 
+      }
+    }
+  }
+
+  /**/
 
   String _getPorcentagem(int numAtividades, int pontosAtual) {
     if(pontosAtual == 0 && numAtividades == 0){
