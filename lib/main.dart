@@ -1,4 +1,5 @@
 import 'package:desenvolverapp/screens/AlunoAtividade.dart';
+import 'package:desenvolverapp/screens/ErroNaSenha.dart';
 import 'package:flutter/material.dart';
 import 'package:desenvolverapp/screens/WelcomeScreen.dart';
 import 'package:desenvolverapp/screens/LoginScreen.dart';
@@ -18,6 +19,7 @@ class DesenvolverApp extends StatelessWidget {
       routes: {
         WelcomeScreen.ID: (context)                     => WelcomeScreen(),
         LoginScreen.ID: (context)                       => LoginScreen(),
+        ErroNaSenhaScreen.ID: (context)                       => ErroNaSenhaScreen(),
         RegistrationScreen.ID: (context)                => RegistrationScreen(),
         MenuInicialScreen.ID: (context)                 => MenuInicialScreen(),
         //MenuInicialUsuarioScreen.ID: (context)          => MenuInicialUsuarioScreen(),
