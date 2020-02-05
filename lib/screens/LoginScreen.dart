@@ -130,12 +130,10 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.white,
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
+
+        child: new ListView(
+          children: <Widget>[
+        new Column(children:<Widget>[
               Hero(
                 tag: 'logo',
                 child: Container(
@@ -148,6 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(
                 height: 48.0,
               ),
+
               TextField(
                 style: TextStyle(color: Colors.black.withOpacity(1.0)),
                 textAlign: TextAlign.center,
@@ -256,10 +255,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
+
             ],
           ),
+          ],
+          ),
         ),
-      ),
     );
   }
 }
