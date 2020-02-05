@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -8,6 +9,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'AlunoAtividade.dart';
 import 'LoginScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth, FirebaseUser;
+import 'TrocarSenha.dart';
 
 class MenuInicialScreen extends StatefulWidget {
   @override
@@ -26,8 +29,10 @@ class MenuInicialScreen extends StatefulWidget {
 
 class _MenuInicialScreenState extends State<MenuInicialScreen> {
   final _auth = FirebaseAuth.instance;
+  String userID_atual = "";
   String        senha       = "";
   String        usuario     = "";
+  String        novaSenha     = "";
   Widget        widgetBody;
   String        messageText = "";
   String        loggedInUserLocal;
@@ -50,6 +55,7 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
       if (user != null) {
         MenuInicialScreen.loggedInUser = user;
         loggedInUserLocal = user.email;
+        userID_atual = user.uid;
       }
     } catch (e) {
       //final sair = await _auth.signOut();
@@ -135,6 +141,120 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
     }
   }
 
+  void _changePassword(String password) async{
+    //Create an instance of the current user.
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+    //Pass in the password to updatePassword.
+    user.updatePassword(password).then((_){
+      print("Succesfull changed password");
+    }).catchError((error){
+      print("Password can't be changed" + error.toString());
+      //This might happen, when the wrong password is in, the user isn't found, or if the user hasn't logged in recently.
+    });
+  }
+
+  void _showDialogTeste() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // retorna um objeto do tipo Dialog
+        return AlertDialog(
+          title: new Text("Alteração de senha", style: TextStyle(color: Colors.black),),
+          content: new Text("Sua senha foi alterada com sucesso!", style: TextStyle(color: Colors.black),),
+          actions: <Widget>[
+            // define os botões na base do dialogo
+            new FlatButton(
+              child: new Text("ok"),
+              onPressed: () {
+                Navigator.pushNamed(context, LoginScreen.ID);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showDialogAlterarSenha() {
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // retorna um objeto do tipo Dialog
+        return SimpleDialog(
+          title: new Text("Alterar senha do App", style: TextStyle(color: Colors.black),),
+
+          children: <Widget>[
+
+            new TextField(
+              style: TextStyle(color: Colors.grey),
+              enabled: true,
+              expands: false,
+              onChanged: (value){
+                novaSenha = value;
+              },
+            ),
+            new Row( children: <Widget>[
+              new FlatButton(child: new Text("        "),onPressed: () {},),
+              new FlatButton(child: new Text("Confirmar"),onPressed: () {
+                _changePassword(novaSenha);
+                _showDialogTeste();
+                //Navigator.pushNamed(context, LoginScreen.ID);
+              },),
+              new FlatButton(child: new Text("Fechar"),onPressed: () {Navigator.of(context).pop();},
+                ),
+              ],
+            ),
+          ],
+          /*actions: <Widget>[
+
+            /*TextField(
+              style: TextStyle(color: Colors.black.withOpacity(1.0)),
+              textAlign: TextAlign.center,
+              onChanged: (value) {
+                novaSenha = value;
+              },
+              decoration: InputDecoration(
+                hintText: 'Entre com a nova senha',
+                hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
+                contentPadding:
+                EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide:
+                  BorderSide(color: Colors.lightBlueAccent, width: 1.0),
+                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide:
+                  BorderSide(color: Colors.lightBlueAccent, width: 2.0),
+                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                ),
+              ),
+            ),*/
+
+            new FlatButton(
+              child: new Text("Confirmar"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+
+            new FlatButton(
+              child: new Text("Fechar"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],*/
+        );
+      },
+    );
+  }
+
   /**/
 
   Widget build(BuildContext context) {
@@ -144,8 +264,20 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
         appBar: AppBar(
           backgroundColor: Colors.lightBlueAccent,
           centerTitle: true,
-          title: Text('Desenvolver - ' + LoginScreen.nomeUsuarioLogado),
-          leading: new Container(),
+          title: Text('Desenvolver  - ' + LoginScreen.nomeUsuarioLogado),
+          leading: new Container(
+              child: IconButton(
+
+                  onPressed: (){
+                    print('Trocar senha pressionado');
+                    print(userID_atual);
+                    _showDialogAlterarSenha();
+                  },
+                  icon: Icon(Icons.vpn_key),
+
+              )
+
+          ),
         ),
         backgroundColor: Colors.white,
         body: ModalProgressHUD(

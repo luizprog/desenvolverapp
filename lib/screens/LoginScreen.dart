@@ -23,7 +23,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  var _auth = FirebaseAuth.instance;
+  static var _auth = FirebaseAuth.instance;
   var _firestore = Firestore.instance;
 
   bool showSpinner    = false;
