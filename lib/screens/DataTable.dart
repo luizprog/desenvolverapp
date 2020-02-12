@@ -262,11 +262,11 @@ class _DataTableScreenState extends State<DataTableScreen> {
     QuerySnapshot querySnapshot;
     if (lastDocument == null) {
       querySnapshot = await firestore
-          .collection('procedimento')
+          .collection('procedimento').orderBy('usuario')
           .getDocuments();
     } else {
       querySnapshot = await firestore
-          .collection('procedimento')
+          .collection('procedimento').orderBy('usuario')
           .startAfterDocument(lastDocument)
           .getDocuments();
       print(1);
@@ -307,15 +307,7 @@ class _DataTableScreenState extends State<DataTableScreen> {
 
             child: Column(
                 children: [
-                    Container(
-
-                      height: MediaQuery.of(context).size.height / 10,
-                      decoration:  BoxDecoration(
-                        border: Border.all(width: 0.5
-                            ,color: Colors.grey),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child:Expanded(
+                    Expanded(
                       child: products.length == 0
                           ? Center(
                         child: Text('No Data...'),
@@ -351,7 +343,7 @@ class _DataTableScreenState extends State<DataTableScreen> {
                     },
                 ),
               ),
-              ),
+
 
               isLoading
                   ? Container(
