@@ -6,6 +6,7 @@ import 'package:desenvolverapp/screens/LoginScreen.dart';
 import 'package:desenvolverapp/screens/RegistrationScreen.dart';
 import 'package:desenvolverapp/screens/MenuInicial.dart';
 import 'package:desenvolverapp/screens/MenuInicialUsuario.dart';
+import 'package:desenvolverapp/screens/DataTable.dart';
 import 'package:desenvolverapp/screens/RegistroAtividadeIndividualScreen.dart';
 
 void main() => runApp(DesenvolverApp());
@@ -24,6 +25,7 @@ class DesenvolverApp extends StatelessWidget {
         MenuInicialScreen.ID: (context)                 => MenuInicialScreen(),
         RegistroAtividadeIndividualScreen.ID: (context) => RegistroAtividadeIndividualScreen(),
         AlunoAtividadeScreen.ID: (context)              => AlunoAtividadeScreen(),
+        DataTableScreen.ID: (context) => DataTableScreen(),
       },
     );
   }

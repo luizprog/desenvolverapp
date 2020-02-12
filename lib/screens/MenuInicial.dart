@@ -1,3 +1,4 @@
+import 'package:desenvolverapp/screens/DataTable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,6 +11,7 @@ import 'AlunoAtividade.dart';
 import 'LoginScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth, FirebaseUser;
+import 'package:csv/csv.dart';
 import 'TrocarSenha.dart';
 
 class MenuInicialScreen extends StatefulWidget {
@@ -269,8 +271,6 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
               child: IconButton(
 
                   onPressed: (){
-                    print('Trocar senha pressionado');
-                    print(userID_atual);
                     _showDialogAlterarSenha();
                   },
                   icon: Icon(Icons.vpn_key),
@@ -354,9 +354,11 @@ class _MenuInicialScreenState extends State<MenuInicialScreen> {
               backgroundColor: Colors.lightGreen,
               labelStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
               label: 'Relatório de desempenho',
-              labelBackgroundColor: Colors.grey,
+              //labelBackgroundColor: Colors.grey,
               //labelStyle: TextTheme(fontSize: 18.0),
-              onTap: () => print('THIRD CHILD'),
+              onTap: (){
+                Navigator.pushNamed(context, DataTableScreen.ID);
+              },
             ),
           ],
         ),

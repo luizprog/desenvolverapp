@@ -65,8 +65,6 @@ class _RegistroAtividadeIndividualScreenState
       final user = await _auth.currentUser();
       if (user != null) {
         regloggedInUser = user;
-        print(user.email);
-        print('qwertyu');
       }
     } catch (e) {
       print(e);
@@ -84,7 +82,6 @@ class _RegistroAtividadeIndividualScreenState
   void changedDropDownItem(String selectedCity) {
     setState(() {
       _currentCity = selectedCity;
-      print(selectedCity);
     });
   }
 
@@ -113,7 +110,7 @@ class _RegistroAtividadeIndividualScreenState
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightBlueAccent,
-        title: Text('D'),
+        title: Text('Cadastro de Atividade'),
       ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -125,7 +122,6 @@ class _RegistroAtividadeIndividualScreenState
             SizedBox(
               height: 48.0,
             ),
-
             Container(
               height: 200.0,
               child: Image.asset('images/auti.png'),
@@ -155,7 +151,7 @@ class _RegistroAtividadeIndividualScreenState
                         width: 1.0)),
                 padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
                 child: StreamBuilder<QuerySnapshot>(
-                  stream: firestore.collection('usuarios').snapshots(),
+                  stream: firestore.collection('usuarios').where('nivelDeAcesso', isEqualTo: 'comum').snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (!snapshot.hasData) return const Text('Carregando...');
@@ -180,7 +176,7 @@ class _RegistroAtividadeIndividualScreenState
                         return new DropdownMenuItem<String>(
                           value: map["usuario"].toString(),
                           child: new Text(
-                            map["usuario"],
+                             map["nomeusuario"] ,
                             style: TextStyle(color: Colors.blueAccent),
                             textAlign: TextAlign.center,
                           ),
@@ -571,6 +567,9 @@ class _RegistroAtividadeIndividualScreenState
                         'acertosNecessarios': acertoNecessarioInformado,
                         'acertos': int.parse(acertos.toString()),
                         'grupoProcedimento':  grupoProcedimentoInformado,
+                        'comajuda': "0",
+                        'semajuda': "0",
+                        'parcialajuda': "0",
                         'pontuacao': 0,
                         'pontuacaoAtual': 0
                       });
@@ -580,7 +579,6 @@ class _RegistroAtividadeIndividualScreenState
                       });
                       Navigator.pushNamed(context, MenuInicialScreen.ID);
                     } catch (e) {
-                      print("Erro");
                       print(e);
                     }
                   },

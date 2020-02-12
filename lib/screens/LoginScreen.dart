@@ -52,7 +52,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }catch(e){
       if(e.toString().contains('ERROR_WRONG_PASSWORD'))
       {
-        print('No IFFF 9872');
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -77,7 +76,6 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       if(e.toString().contains('ERROR_TOO_MANY_REQUESTS'))
       {
-        print('No IFFF 9872');
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -100,11 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
           },
         );
       }
-
-      print('Erro 3: ' + e.toString());
     }
-
-
   }
 
   void getUsuarioPermisssao() async {

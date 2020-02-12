@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ui' as prefix0;
 
 import 'package:desenvolverapp/screens/DialogAtividade.dart';
@@ -43,6 +44,7 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
   String agendahoraSelecionada;
   int    pontuacaoAtual = 0;
   int    qtde;
+  int comajuda,semajuda,parcialajuda;
   FirebaseUser loggedInUser;
   var diasEntrega;
   var entreguesNoDiaDeHoje;
@@ -101,23 +103,30 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                 acertosAgora=0;
 
                 //pontuacaoAtual = 100;
+                semajuda = 0;
+                comajuda = 0;
+                parcialajuda = 0;
                 if(x > 90) {
                   tipoConclusao = 'sem ajuda';
+                  semajuda = 1;
                   acertosAgora = 1;
                 }
                 if (x > 0 && x < 100 )
                 {
                   tipoConclusao = 'parcial';
+                  comajuda = 1;
                 }
                 if(x < 1)
                 {
                   tipoConclusao = 'total';
+                  parcialajuda = 1;
                 }
                 DateTime now = DateTime.now();
                 var Quantidade;
                 
                 setState(() {
-                    getUsuarioAcertos(documentID, MenuInicialScreen.loggedInUser.email,Quantidade,now, acertosAgora);                    
+
+                    getUsuarioAcertos(documentID, MenuInicialScreen.loggedInUser.email,Quantidade,now, acertosAgora);
                 });
                 
 
@@ -127,6 +136,8 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
                     'id': ProcedimentoID + TimeOfDay.now().toString(),
                     'procedimento': atividadeSelecionada,
                     'usuario':UserID,
+                    'usuarioEmail':MenuInicialScreen.loggedInUser.email,
+                    'nomeUsuario':nomeUsuarioSelecionado,
                     'dataEntrega':now,
                     'conclusao':tipoConclusao,
                     'pontuacao':x,
@@ -161,8 +172,16 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
           print('Acertos na funcao getUsuarioAcertos');
           
           print(idUsuario);
+
           acerto = acertoDocumentoFor.data['acertos'];
           print(acerto);
+
+
+          comajuda = int.parse(acertoDocumentoFor.data['comajuda'])+ comajuda;
+          semajuda = int.parse(acertoDocumentoFor.data['semajuda'])+ semajuda;
+          parcialajuda = int.parse(acertoDocumentoFor.data['parcialajuda'])+ parcialajuda;
+
+
           if(acerto!=null){
             if(acertosAgora>0){
               acerto = int.parse(acerto.toString())+acertosAgora;
@@ -170,7 +189,13 @@ class _AlunoAtividadeScreenState extends State<AlunoAtividadeScreen> {
             Firestore.instance
             .collection("procedimento")
             .document(idProcedimento)
-            .updateData({"entregasHoje": Quantidade, 'dataEntrega': now, 'acertos': acerto});
+            .updateData({
+              "entregasHoje": Quantidade,
+              'dataEntrega': now,
+              'acertos': acerto,
+              'semajuda': semajuda.toString(),
+              'comajuda': comajuda.toString(),
+              'parcialajuda': parcialajuda.toString()});
           }else{
             print("Nao foi possivel atualizar, acertos estao nulo!");
           }

@@ -30,9 +30,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   void initState() {
     _comboTipo.addAll(['administrador', 'comum']);
     //  tipo = _comboTipo.elementAt(0);
-    print(tipo);
-    print(_comboTipo.toString());
-
     _dropDownMenuItems = getDropDownMenuItems();
     tipo = _dropDownMenuItems[0].value;
   }
@@ -46,7 +43,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   void changedDropDownItem(String selectedCity) {
     setState(() {
       _currentCity = selectedCity;
-      print(selectedCity);
     });
   }
   Widget build(BuildContext context) {
@@ -200,7 +196,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             showSpinner = false;
                           });
                         } catch (e) {
-                          print("Erro");
                           print(e);
                         }
                       },
